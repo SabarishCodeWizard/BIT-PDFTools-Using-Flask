@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Game</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+    <script>
+        let startTime;
+        let sentence = "{{ sentence }}";
+        let userInput = '';
+        let isTypingStarted = false;
+        let timer;
+        let timeLeft = 60; // 60 seconds timer for the game
+        let wordsTyped = 0;
+        let timerInterval;
+        let isGameRunning = false;
+
+        // Function to start typing
+        function startTyping() {
+            if (!isGameRunning) {
+                timeLeft = 60; // Reset time
+                wordsTyped = 0; // Reset words typed
+                document.getElementById('wordsTyped').textContent = "Words Typed: 0";
+                document.getElementById('timer').textContent = timeLeft + " seconds left";
+                sentence = "{{ sentence }}";  // Load new sentence for the game
+                isTypingStarted = false; // Reset typing started flag
+                startTime = undefined; // Reset start time
+                isGameRunning = true;
+                startTimer();
+                document.getElementById('inputBox').disabled = false; // Enable typing box
+            }
+        }
+
+        // Function to start countdown timer
+        function startTimer() {
+            timerInterval = setInterval(function() {
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Time's up! Game over.");
+                    finishGame();
+                } else {
+                    document.getElementById('timer').textContent = timeLeft + " seconds left";
+                    timeLeft--;
+                }
+            }, 1000);
+        }
+
+        // Function to refresh the game
+        function refreshGame() {
+            clearInterval(timerInterval);
+            document.getElementById('inputBox').value = ''; // Clear input box
+            document.getElementById('inputBox').disabled = true; // Disable typing box
+            isGameRunning = false;
+            wordsTyped = 0;
+            document.getElementById('wordsTyped').textContent = "Words Typed: 0";
+            document.getElementById('timer').textContent = "Game not started";
+        }
+
+        // Function to check user input and finish the game
+        function checkInput(event) {
+            if (!isTypingStarted) {
+                startTyping();
+                isTypingStarted = true;
+            }
+
+            userInput = event.target.value;
+            wordsTyped = userInput.split(/\s+/).length;
+            document.getElementById('wordsTyped').textContent = "Words Typed: " + wordsTyped;
+
+            if (userInput === sentence) {
+                clearInterval(timerInterval);
+                finishGame();
+            }
+        }
+
+        // Function to finish the game and calculate results
+        function finishGame() {
+            let endTime = new Date().getTime();
+            let userInputEncoded = encodeURIComponent(userInput);
+            let url = `/calculate_result/${userInputEncoded}/${startTime}/${endTime}/{{ difficulty }}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    alert(`Game Over!\nWPM: ${data.wpm.toFixed(2)}\nAccuracy: ${data.accuracy.toFixed(2)}%\nTime Taken: ${data.time_taken.toFixed(2)}s\nWords Typed: ${data.words_typed}`);
+                });
+        }
+    </script>
+</head>
+<body>
+    <h2>Typing Game - Difficulty: {{ difficulty | capitalize }}</h2>
+    <p id="sentence">{{ sentence }}</p>
+    <p id="timer">Game not started</p>
+    <p id="wordsTyped">Words Typed: 0</p>
+    <input type="text" id="inputBox" placeholder="Start typing..." oninput="checkInput(event)" disabled>
+    <div>
+        <button onclick="startTyping()">Start</button>
+        <button onclick="refreshGame()">Refresh</button>
+    </div>
+</body>
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+}
+
+#sentence {
+    font-size: 20px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+#timer {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+#wordsTyped {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+#inputBox {
+    display: block;
+    margin: 0 auto;
+    padding: 10px;
+    font-size: 18px;
+    width: 60%;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+#inputBox:focus {
+    border-color: #4CAF50;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+</style>
+</html>

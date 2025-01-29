@@ -1,5 +1,6 @@
 from flask import Flask,flash, render_template, request, redirect, url_for, session, jsonify, make_response,send_file
 from flask_session import Session
+import random
 import requests
 import firebase_admin
 from firebase_admin import credentials, auth
@@ -54,6 +55,22 @@ firebase_admin.initialize_app(cred)
 
 # Initialize Google Translator
 translator = Translator()
+
+# Paths for the text files containing different difficulty sentences
+SENTENCES_DIR = 'static/sentences'
+
+# Function to read sentences from a file
+def load_sentences(file_name):
+    file_path = os.path.join(SENTENCES_DIR, file_name)
+    with open(file_path, 'r') as file:
+        return file.readlines()
+
+# Sentences for each difficulty level loaded from text files
+sentences = {
+    "easy": load_sentences("easy.txt"),
+    "medium": load_sentences("medium.txt"),
+    "hard": load_sentences("hard.txt")
+}
 
 # Helper function to suggest translations
 def suggest_translation(text, history):
@@ -654,6 +671,32 @@ def split_pdf():
     
     return render_template('split_pdf.html')
 
+
+
+@app.route('/game/<difficulty>')
+def game(difficulty):
+    if difficulty not in sentences:
+        return "Invalid difficulty", 404
+    sentence = random.choice(sentences[difficulty]).strip()  # Strip to remove extra newlines
+    return render_template('typing.html', sentence=sentence, difficulty=difficulty)
+
+@app.route('/calculate_result/<string:user_input>/<int:start_time>/<int:end_time>/<difficulty>')
+def calculate_result(user_input, start_time, end_time, difficulty):
+    # Calculate time taken to type (in seconds)
+    time_taken = (end_time - start_time) / 1000
+    word_count = len(user_input.split())
+    wpm = (word_count / time_taken) * 60  # Words per minute
+
+    # Calculate accuracy
+    sentence = random.choice(sentences[difficulty]).strip()
+    correct_chars = sum(1 for i, c in enumerate(user_input) if i < len(sentence) and c == sentence[i])
+    accuracy = (correct_chars / len(sentence)) * 100
+
+    return jsonify({
+        'wpm': wpm,
+        'accuracy': accuracy,
+        'time_taken': time_taken
+    })
 
 
 if __name__ == '__main__':
