@@ -8,15 +8,16 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bagel+Fat+One&display=swap');
         :root {
             --bg-color: #FFFFFF;
             --text-color: #000000;
             --main-color: #F0F0F0;
             --secondary-bg-color: #CCCCCC;
             --button-bg-color: #007BFF; /* New button background color */
-            --button-text-color: #FFFFFF; /* New button text color */
+            --button-text-color: #000000; /* Changed button text color */
             --dropdown-bg-color: #007BFF; /* New dropdown background color */
-            --dropdown-text-color: #FFFFFF; /* New dropdown text color */
+            --dropdown-text-color: #000000; /* Changed dropdown text color */
         }
 
         body {
@@ -98,7 +99,7 @@
             width: 80%;
             padding: 10px;
             border-radius: 5px;
-            color: var(--bg-color);
+            color: var(--text-color); /* Changed text color */
             margin-top: 10px;
             resize: none;
             margin-left: 50px;
@@ -130,7 +131,10 @@
         }
 
         .heading {
-            color: var(--secondary-bg-color);
+            color: #03045f;
+            font-family: "Bagel Fat One", serif;
+            font-weight: 400;
+            font-style: normal;
         }
 
         .form-group {
@@ -221,7 +225,7 @@
             margin: 5px;
             padding: 10px;
             background-color: #00aced;
-            color: white;
+            color: var(--text-color); /* Changed text color */
             border-radius: 5px;
             text-decoration: none;
         }
@@ -316,7 +320,10 @@
             <i class="fas fa-bars"></i>
         </div>
         <div class="navigation-links">
-            <a href="{{ url_for('home') }}" class="home-button"><i class="fas fa-home"></i> Home</a>
+            <a href="{{ url_for('home') }}" >
+                <i class="fas fa-home"></i>
+                Home
+            </a>
             <a href="{{ url_for('feedback') }}"><i class="fas fa-comment-dots"></i> Feedback</a>
             <a href="{{ url_for('favorites') }}"><i class="fas fa-star"></i> Favorites</a>
             <a href="{{ url_for('view_history') }}"><i class="fas fa-history"></i> History</a>
