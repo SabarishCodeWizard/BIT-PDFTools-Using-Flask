@@ -30,6 +30,10 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from docx2pdf import convert
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+import openpyxl
+import fitz  # PyMuPDF
 
 
 # Initialize Flask app
@@ -448,6 +452,7 @@ def convert_image_to_pdf():
     return render_template('convert_image_to_pdf.html')
 
 # Convert Excel to PDF
+
 @app.route('/convert_excel_to_pdf', methods=['GET', 'POST'])
 def convert_excel_to_pdf():
     if request.method == 'POST':
@@ -463,16 +468,22 @@ def convert_excel_to_pdf():
             excel_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             excel_file.save(excel_path)
             
-            # Convert Excel to PDF (simplified)
+            # Convert Excel to PDF using ReportLab
             wb = openpyxl.load_workbook(excel_path)
             sheet = wb.active
             pdf_path = os.path.join(app.config['UPLOAD_FOLDER'], filename.rsplit('.', 1)[0] + '.pdf')
-            pdf = FPDF()
-            pdf.add_page()
+            c = canvas.Canvas(pdf_path, pagesize=letter)
+
+            y_position = 750  # Starting Y position for writing to the PDF
             for row in sheet.iter_rows():
                 row_text = ' '.join([str(cell.value) for cell in row])
-                pdf.cell(200, 10, txt=row_text, ln=True)
-            pdf.output(pdf_path)
+                c.drawString(50, y_position, row_text)
+                y_position -= 15  # Move to the next line
+                if y_position < 50:  # Add a new page if text overflows
+                    c.showPage()
+                    y_position = 750
+
+            c.save()
 
             return send_file(pdf_path, as_attachment=True)
         except Exception as e:
@@ -537,18 +548,19 @@ def pdf_to_image():
             pdf_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             pdf_file.save(pdf_path)
             
-            # Convert PDF to Images (one image per page)
-            images = []
-            with open(pdf_path, 'rb') as f:
-                pdf = PdfReader(f)
-                for i, page in enumerate(pdf.pages):
-                    image = page.to_image()
-                    img_path = os.path.join(app.config['UPLOAD_FOLDER'], f"page_{i+1}.png")
-                    image.save(img_path)
-                    images.append(img_path)
+            # Open the PDF with PyMuPDF (fitz)
+            doc = fitz.open(pdf_path)
+            image_paths = []
+            for i in range(len(doc)):
+                # Get the page as a pixmap (image)
+                page = doc.load_page(i)
+                pix = page.get_pixmap()
+                img_path = os.path.join(app.config['UPLOAD_FOLDER'], f"page_{i+1}.png")
+                pix.save(img_path)
+                image_paths.append(img_path)
             
-            # Return first image for download (you can return a zip of all images too)
-            return send_file(images[0], as_attachment=True)
+            # Return the first image for download (you can modify to return all images)
+            return send_file(image_paths[0], as_attachment=True)
         except Exception as e:
             return render_template('pdf_to_image.html', error=f"Error: {str(e)}")
     
