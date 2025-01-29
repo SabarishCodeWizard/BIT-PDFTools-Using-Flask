@@ -59,17 +59,18 @@ translator = Translator()
 # Paths for the text files containing different difficulty sentences
 SENTENCES_DIR = 'static/sentences'
 
-# Function to read sentences from a file
-def load_sentences(file_name):
+# Function to read paragraphs from a file
+def load_paragraphs(file_name):
     file_path = os.path.join(SENTENCES_DIR, file_name)
-    with open(file_path, 'r') as file:
-        return file.readlines()
+    with open(file_path, 'r', encoding="utf-8") as file:
+        paragraphs = file.read().strip().split("\n\n")  # Split by double newlines
+    return paragraphs
 
-# Sentences for each difficulty level loaded from text files
-sentences = {
-    "easy": load_sentences("easy.txt"),
-    "medium": load_sentences("medium.txt"),
-    "hard": load_sentences("hard.txt")
+# Load paragraphs for each difficulty level
+paragraphs = {
+    "easy": load_paragraphs("easy.txt"),
+    "medium": load_paragraphs("medium.txt"),
+    "hard": load_paragraphs("hard.txt")
 }
 
 # Helper function to suggest translations
@@ -672,30 +673,32 @@ def split_pdf():
     return render_template('split_pdf.html')
 
 
-
 @app.route('/game/<difficulty>')
 def game(difficulty):
-    if difficulty not in sentences:
+    if difficulty not in paragraphs:
         return "Invalid difficulty", 404
-    sentence = random.choice(sentences[difficulty]).strip()  # Strip to remove extra newlines
-    return render_template('typing.html', sentence=sentence, difficulty=difficulty)
+    paragraph = random.choice(paragraphs[difficulty]).strip()
+    return render_template('typing.html', paragraph=paragraph, difficulty=difficulty)
 
 @app.route('/calculate_result/<string:user_input>/<int:start_time>/<int:end_time>/<difficulty>')
 def calculate_result(user_input, start_time, end_time, difficulty):
-    # Calculate time taken to type (in seconds)
     time_taken = (end_time - start_time) / 1000
-    word_count = len(user_input.split())
-    wpm = (word_count / time_taken) * 60  # Words per minute
+    words_typed_list = user_input.strip().split()
+    paragraph = random.choice(paragraphs[difficulty]).strip()
+    correct_paragraph_words = paragraph.split()
 
-    # Calculate accuracy
-    sentence = random.choice(sentences[difficulty]).strip()
-    correct_chars = sum(1 for i, c in enumerate(user_input) if i < len(sentence) and c == sentence[i])
-    accuracy = (correct_chars / len(sentence)) * 100
+    correct_count = sum(1 for i in range(min(len(words_typed_list), len(correct_paragraph_words))) if words_typed_list[i] == correct_paragraph_words[i])
+    total_words_typed = len(words_typed_list)
+
+    wpm = (total_words_typed / time_taken) * 60 if time_taken > 0 else 0
+    accuracy = (correct_count / len(correct_paragraph_words)) * 100 if correct_paragraph_words else 0
 
     return jsonify({
-        'wpm': wpm,
-        'accuracy': accuracy,
-        'time_taken': time_taken
+        'wpm': round(wpm, 2),
+        'accuracy': round(accuracy, 2),
+        'time_taken': round(time_taken, 2),
+        'words_typed': total_words_typed,
+        'correct_words': correct_count
     })
 
 

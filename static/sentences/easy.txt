@@ -1,9 +1,2 @@
-The sun is bright.I love coding.
-Flask is easy to use.
-The sky is clear.
-Dogs are friendly.
-Apples are sweet.
-Reading books is fun.
-I enjoy playing games.
-The car is fast.
-I like to eat pizza.
+This is a simple paragraph for the typing test. It contains multiple sentences. The user must type it correctly.
+Another paragraph follows for testing. This helps in improving typing speed and accuracy.
