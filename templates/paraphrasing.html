@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paraphrasing Tool</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans antialiased flex justify-center items-center min-h-screen">
+    <div class="bg-white rounded-lg shadow-lg p-8 w-96">
+        <h1 class="text-2xl font-semibold text-center text-gray-700 mb-6">Paraphrasing Tool</h1>
+        
+        <!-- Form for input -->
+        <form method="POST">
+            <textarea name="text" rows="4" cols="50" class="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Enter text to paraphrase" required></textarea>
+            <div class="flex justify-between mt-4">
+                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none">Paraphrase</button>
+                <button type="button" onclick="clearText()" class="bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400 focus:outline-none">Clear</button>
+            </div>
+        </form>
+
+        <!-- Display results -->
+        {% if original %}
+            <div class="mt-6">
+                <h3 class="text-lg font-medium text-gray-700 mb-2">Original Text:</h3>
+                <p class="p-4 bg-gray-50 rounded-md border border-gray-200 mb-4">{{ original }}</p>
+                <h3 class="text-lg font-medium text-gray-700 mb-2">Paraphrased Text:</h3>
+                <p class="p-4 bg-gray-50 rounded-md border border-gray-200">{{ paraphrased }}</p>
+                <div class="flex justify-between mt-4">
+                    <button id="copyButton" onclick="copyToClipboard()" class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none">Copy</button>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Clear textarea function
+        function clearText() {
+            document.querySelector('textarea').value = '';
+        }
+
+        // Copy to clipboard function
+        function copyToClipboard() {
+            const paraphrasedText = document.querySelector('.p-4').textContent;
+            navigator.clipboard.writeText(paraphrasedText).then(() => {
+                alert('Text copied to clipboard!');
+            }).catch(err => {
+                console.error('Error copying text: ', err);
+            });
+        }
+    </script>
+</body>
+</html>

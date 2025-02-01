@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convert Word to PDF</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .drop-zone {
+            border: 2px dashed #4CAF50;
+            padding: 30px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .drop-zone.dragover {
+            background-color: #e0f7e0;
+        }
+        .drop-zone p {
+            margin: 0;
+            color: #555;
+        }
+        .file-info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #333;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Convert Word to PDF</h1>
+        <form method="POST" enctype="multipart/form-data">
+            <div class="drop-zone" id="drop-zone">
+                <p>Drag & Drop your Word file here or click to upload</p>
+                <input type="file" name="word_file" id="word_file" accept=".docx, .doc" hidden required>
+            </div>
+            <p class="file-info" id="file-info">No file selected</p>
+            <button type="submit">Convert</button>
+        </form>
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+    </div>
+
+    <script>
+        const dropZone = document.getElementById("drop-zone");
+        const fileInput = document.getElementById("word_file");
+        const fileInfo = document.getElementById("file-info");
+
+        dropZone.addEventListener("click", () => fileInput.click());
+        fileInput.addEventListener("change", updateFileInfo);
+
+        dropZone.addEventListener("dragover", (event) => {
+            event.preventDefault();
+            dropZone.classList.add("dragover");
+        });
+
+        dropZone.addEventListener("dragleave", () => {
+            dropZone.classList.remove("dragover");
+        });
+
+        dropZone.addEventListener("drop", (event) => {
+            event.preventDefault();
+            dropZone.classList.remove("dragover");
+            const file = event.dataTransfer.files[0];
+            fileInput.files = event.dataTransfer.files;
+            updateFileInfo();
+        });
+
+        function updateFileInfo() {
+            if (fileInput.files.length > 0) {
+                fileInfo.textContent = `Selected file: ${fileInput.files[0].name}`;
+            } else {
+                fileInfo.textContent = "No file selected";
+            }
+        }
+    </script>
+</body>
+</html>
