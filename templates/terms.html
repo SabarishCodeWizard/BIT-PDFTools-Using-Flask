@@ -3,26 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms and Conditions</title>
+    <title>Terms and Conditions | BIT Translator & PDF Tools</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; padding: 20px; max-width: 800px; background-color: #f8f8f8; }
-        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }
-        h1 { color: #333; }
-        p { line-height: 1.6; color: #555; }
-        button { padding: 10px 20px; font-size: 16px; background: #007bff; color: white; border: none; cursor: pointer; }
-        button:hover { background: #0056b3; }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            width: 90%;
+            max-width: 800px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        h1 {
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .terms-content {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+
+        .terms-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .terms-content::-webkit-scrollbar-thumb {
+            background: #bbb;
+            border-radius: 6px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        button {
+            background: #007bff;
+            color: #fff;
+            font-size: 18px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            button {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
         <h1>Terms and Conditions</h1>
-        <p>Please read and accept the terms before proceeding.</p>
-        <p>By using BIT Translator & PDF Tools, you agree to comply with our Terms and Conditions.</p>
 
-        <form action="{{ url_for('terms') }}" method="POST">
-            <button type="submit">Accept and Continue</button>
-        </form>
+        <div class="terms-content">
+            <p>Welcome to <strong>BIT Translator & PDF Tools</strong>. By using our services at 
+            <a href="https://bittranslator.pythonanywhere.com/" target="_blank">bittranslator.pythonanywhere.com</a>, 
+            you agree to the following terms:</p>
+
+            <p><strong>1. Services Provided:</strong> Our platform offers PDF conversions, compression, merging, splitting, and language translation with history and favorites.</p>
+
+            <p><strong>2. User Responsibilities:</strong> Users must not upload illegal, copyrighted, or harmful content.</p>
+
+            <p><strong>3. Privacy & Data Handling:</strong> We do not permanently store user-uploaded files and collect minimal data for authentication and analytics. See our <a href="{{ url_for('privacy') }}">Privacy Policy</a>.</p>
+
+            <p><strong>4. Limitation of Liability:</strong> BIT Translator & PDF Tools is not responsible for data loss, damages, or third-party service interruptions.</p>
+
+            <p><strong>5. Modifications & Termination:</strong> We reserve the right to modify these terms or discontinue services without prior notice.</p>
+
+            <p><strong>6. Contact:</strong> For inquiries, reach out via Email: <a href="mailto:supportbittools@gmail.com">supportbittools@gmail.com</a></p>
+
+            <p><strong>By continuing to use our services, you accept these Terms and Conditions.</strong></p>
+        </div>
+
+        <div class="button-container">
+            <form action="{{ url_for('terms') }}" method="POST">
+                <button type="submit">Accept and Continue</button>
+            </form>
+        </div>
     </div>
 
 </body>
