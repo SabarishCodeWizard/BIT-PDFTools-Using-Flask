@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,7 +51,8 @@
         }
 
         .hamburger-menu {
-            display: block; /* Always show hamburger */
+            display: block;
+            /* Always show hamburger */
             font-size: 1.5rem;
             cursor: pointer;
             color: white;
@@ -64,7 +66,7 @@
             left: 0;
             right: 0;
             background-color: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             z-index: 999;
         }
 
@@ -119,30 +121,30 @@
             margin-bottom: 1rem;
         }
 
-        select{
-            
+        select {
+
             padding: 0.8rem;
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 1rem;
         }
 
-        select:hover{
+        select:hover {
             box-shadow: 0px 0px 14px 14px rgba(27, 22, 22, 0.1);
         }
 
         .textarea {
-             padding: 0.8rem;
+            padding: 0.8rem;
             border: 1px solid #ccc;
             border-radius: 10px;
             font-size: 1rem;
-             width: 80%;
+            width: 80%;
             min-height: 150px;
             resize: vertical;
             margin-bottom: 1rem;
         }
 
-        .textarea:hover{
+        .textarea:hover {
             box-shadow: 0px 0px 14px 14px rgba(27, 22, 22, 0.1);
         }
 
@@ -157,41 +159,42 @@
             margin: 0.5rem;
         }
 
-        .speak-button{
-        padding: 15px;
-        gap: 10px;
-      border-radius: 50px;
-      font-size: medium;
-      border: none;
-      margin-right: 10px;
-      text-decoration: none;
-      font-weight: bold;
-      color: var(--secondary-color);
-      background-color: var(--primary-color);
-      transition: background 0.3s;
+        .speak-button {
+            padding: 15px;
+            gap: 10px;
+            border-radius: 50px;
+            font-size: medium;
+            border: none;
+            margin-right: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            color: var(--secondary-color);
+            background-color: var(--primary-color);
+            transition: background 0.3s;
         }
 
-            .speak-button:hover {
-      background-color: var(--button-hover);
-      box-shadow: 0px 0px 14px 14px rgba(204, 25, 25, 0.1);
-    }
+        .speak-button:hover {
+            background-color: var(--button-hover);
+            box-shadow: 0px 0px 14px 14px rgba(204, 25, 25, 0.1);
+        }
 
         .button:hover {
-           background-color: var(--button-hover);
-      box-shadow: 0px 0px 14px 14px rgba(204, 25, 25, 0.1);
+            background-color: var(--button-hover);
+            box-shadow: 0px 0px 14px 14px rgba(204, 25, 25, 0.1);
         }
 
         /* Results & History */
-        .result, .suggestion {
+        .result,
+        .suggestion {
             background-color: #f5f5f5;
             padding: 1rem;
             margin: 1rem 0;
             border-radius: 10px;
         }
 
-        .result:hover{
-               box-shadow: 0px 0px 14px 14px rgba(27, 22, 22, 0.1);
-    
+        .result:hover {
+            box-shadow: 0px 0px 14px 14px rgba(27, 22, 22, 0.1);
+
         }
 
         .social-sharing {
@@ -245,7 +248,7 @@
             margin-bottom: 5px;
         }
 
-        .header-hamburger:hover{
+        .header-hamburger:hover {
             box-shadow: 0px 0px 14px 14px rgba(27, 22, 22, 0.1);
         }
 
@@ -256,7 +259,7 @@
             top: 100%;
             right: 0;
             background: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
             border-radius: 4px;
             min-width: 200px;
             z-index: 1000;
@@ -279,13 +282,49 @@
             background-color: #f5f5f5;
         }
 
-        .form-container{
+        .form-container {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
+
+        /* Dropdown container */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Dropdown content (hidden by default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 150px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            z-index: 1;
+        }
+
+        /* Dropdown links */
+        .dropdown-content a {
+            color: black;
+            padding: 10px;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Hover effect */
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Show dropdown when active */
+        .dropdown.active .dropdown-content {
+            display: block;
+        }
     </style>
 </head>
+
 <body>
     <header>
         <div class="nav-bar">
@@ -295,9 +334,24 @@
             <div class="menu-icon" onclick="toggleMenu()">☰</div>
             <div class="menu-links">
                 <a class="nav-btn" href="{{ url_for('home')}}">Home</a>
-                <a class="nav-btn" href="#">Features</a>
+
+                <!-- Features with Dropdown -->
+                <div class="dropdown">
+                    <a class="nav-btn" href="#" onclick="toggleDropdown(event)">Features ▼</a>
+                    <div class="dropdown-content" id="featuresDropdown">
+                        <a href="{{ url_for('translator')}}">Translator</a>
+                        <a href="{{ url_for('convert_pdf')}}">PDF to Word</a>
+                        <a href="{{ url_for('convert_word_to_pdf')}}">Word to PDF</a>
+                        <a href="{{ url_for('convert_image_to_pdf')}}">Image to PDF</a>
+                        <a href="{{ url_for('convert_excel_to_pdf')}}">Excel to PDF</a>
+                        <a href="{{ url_for('compress_pdf')}}">Compress PDF</a>
+                        <a href="{{ url_for('pdf_to_image')}}">PDF to Image</a>
+                        <a href="{{ url_for('merge_pdfs')}}">Merge PDFs</a>
+                        <a href="{{ url_for('split_pdf')}}">Split PDFs</a>
+                    </div>
+                </div>
+
                 <a class="nav-btn" href="{{ url_for('about') }}">About</a>
-                <a class="nav-btn" href="#">Contact</a>
                 <a class="nav-btn" href="{{ url_for('feedback') }}">Feedback</a>
                 <div class="login">
                     <a class="login-btn" style="color: var(--bg-color);" href="{{ url_for('logout') }}">Logout</a>
@@ -305,6 +359,7 @@
             </div>
         </div>
     </header>
+
 
     <div class="container">
         <div class="heading-wrapper">
@@ -320,7 +375,7 @@
                 </nav>
             </div>
         </div>
-        
+
         <form class="form-container" method="POST">
             <div class="dropdown-group">
                 <select name="src_lang" required>
@@ -357,9 +412,9 @@
                     <option value="bn">Bengali</option>
                 </select>
             </div>
-            
+
             <textarea class="textarea" name="text" id="text" placeholder="Enter text to translate" required></textarea>
-            
+
             <div style="text-align: center;">
                 <button type="button" onclick="startDictation()" class="speak-button">
                     <i class="fas fa-microphone"></i>
@@ -376,32 +431,35 @@
         <div class="result">
             <h2>Translation</h2>
             <p id="translatedText">{{ translation }}</p>
-            <button onclick="copyText()" class="speak-button" style="background-color: rgb(102, 168, 102);"><i class="fa-solid fa-copy"></i></button>
-            <button onclick="speak('{{ translation }}')" class="speak-button"  style="background-color: rgb(133, 131, 54);"><i class="fa-solid fa-headphones"></i></button>
-            
+            <button onclick="copyText()" class="speak-button" style="background-color: rgb(102, 168, 102);"><i
+                    class="fa-solid fa-copy"></i></button>
+            <button onclick="speak('{{ translation }}')" class="speak-button"
+                style="background-color: rgb(133, 131, 54);"><i class="fa-solid fa-headphones"></i></button>
+
             <form id="favoriteForm" method="POST" action="{{ url_for('add_favorite') }}" style="display: none;">
                 <input type="hidden" name="text" value="{{ translation }}">
                 <input type="hidden" name="translation" value="{{ translation }}">
                 <input type="hidden" name="src" value="{{ src_lang }}">
                 <input type="hidden" name="dest" value="{{ dest_lang }}">
             </form>
-            <button onclick="document.getElementById('favoriteForm').submit();"  style="background-color: rgb(240, 81, 108);" class="speak-button">
+            <button onclick="document.getElementById('favoriteForm').submit();"
+                style="background-color: rgb(240, 81, 108);" class="speak-button">
                 <i class="fa-solid fa-heart"></i>
             </button>
         </div>
 
         <div class="social-sharing">
             <h2>Share Translation</h2>
-            <a href="https://twitter.com/intent/tweet?text={{ translation }}" target="_blank" 
-               class="social-button" style="background-color: #1DA1F2;">
+            <a href="https://twitter.com/intent/tweet?text={{ translation }}" target="_blank" class="social-button"
+                style="background-color: #1DA1F2;">
                 <i class="fab fa-twitter"></i>
             </a>
-            <a href="https://www.facebook.com/sharer/sharer.php?u={{ url_for('home', _external=True) }}" 
-               target="_blank" class="social-button" style="background-color: #4267B2;">
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ url_for('home', _external=True) }}" target="_blank"
+                class="social-button" style="background-color: #4267B2;">
                 <i class="fab fa-facebook"></i>
-                        </a>
-            <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ url_for('home', _external=True) }}&title=Translation&summary={{ translation }}" 
-               target="_blank" class="social-button" style="background-color: #0077B5;">
+            </a>
+            <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ url_for('home', _external=True) }}&title=Translation&summary={{ translation }}"
+                target="_blank" class="social-button" style="background-color: #0077B5;">
                 <i class="fab fa-linkedin"></i>
             </a>
         </div>
@@ -427,7 +485,7 @@
         document.addEventListener('click', (e) => {
             const navMenu = document.querySelector('.navigation-menu');
             const hamburger = document.querySelector('.hamburger-menu');
-            
+
             if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
                 navMenu.classList.remove('active');
             }
@@ -441,13 +499,13 @@
                 recognition.interimResults = false;
                 recognition.lang = "en-US";
                 recognition.start();
-                
-                recognition.onresult = function(e) {
+
+                recognition.onresult = function (e) {
                     document.getElementById('text').value = e.results[0][0].transcript;
                     recognition.stop();
                 };
-                
-                recognition.onerror = function(e) {
+
+                recognition.onerror = function (e) {
                     recognition.stop();
                 };
             }
@@ -459,7 +517,7 @@
             voices = window.speechSynthesis.getVoices();
             let voiceSelect = document.getElementById('voiceSelect');
             voiceSelect.innerHTML = '';
-            
+
             voices.forEach((voice, i) => {
                 let option = document.createElement('option');
                 option.value = voice.name;
@@ -474,7 +532,7 @@
             let msg = new SpeechSynthesisUtterance(text);
             let selectedVoiceName = document.getElementById('voiceSelect').value;
             let selectedVoice = voices.find(voice => voice.name === selectedVoiceName);
-            
+
             if (selectedVoice) {
                 msg.voice = selectedVoice;
             }
@@ -485,10 +543,10 @@
         function copyText() {
             let translatedText = document.getElementById('translatedText').innerText;
             navigator.clipboard.writeText(translatedText).then(
-                function() {
+                function () {
                     alert('Translation copied to clipboard!');
-                }, 
-                function() {
+                },
+                function () {
                     alert('Failed to copy text.');
                 }
             );
@@ -507,25 +565,40 @@
         document.addEventListener('click', (e) => {
             const nav = document.querySelector('.header-nav');
             const hamburger = document.querySelector('.header-hamburger');
-            
+
             if (!nav.contains(e.target) && !hamburger.contains(e.target)) {
                 nav.classList.remove('active');
             }
         });
 
-               function toggleMenu() {
-                    document.querySelector('.menu-links').classList.toggle('active');
-                }
+        function toggleMenu() {
+            document.querySelector('.menu-links').classList.toggle('active');
+        }
 
-                // Close menu when clicking outside (for mobile only)
-                document.addEventListener('click', function (event) {
-                    const menu = document.querySelector('.menu-links');
-                    const menuIcon = document.querySelector('.menu-icon');
+        // Close menu when clicking outside (for mobile only)
+        document.addEventListener('click', function (event) {
+            const menu = document.querySelector('.menu-links');
+            const menuIcon = document.querySelector('.menu-icon');
 
-                    if (!menu.contains(event.target) && !menuIcon.contains(event.target)) {
-                        menu.classList.remove('active');
-                    }
-                });
+            if (!menu.contains(event.target) && !menuIcon.contains(event.target)) {
+                menu.classList.remove('active');
+            }
+        });
+
+        function toggleDropdown(event) {
+            event.preventDefault(); // Prevent default anchor action
+            let dropdown = document.getElementById("featuresDropdown");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", function (event) {
+            let dropdown = document.getElementById("featuresDropdown");
+            if (!event.target.closest(".dropdown")) {
+                dropdown.style.display = "none";
+            }
+        });
     </script>
 </body>
+
 </html>

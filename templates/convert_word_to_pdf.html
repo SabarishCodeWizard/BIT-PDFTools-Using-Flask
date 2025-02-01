@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='feature.css') }}">
     <script src="{{ url_for('static',filename = 'script.js')}}"></script>
     <style>
-        .body-container{
+        .body-container {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
             display: flex;
@@ -17,6 +18,7 @@
             margin: 10px;
             border-radius: 10px;
         }
+
         .container {
             background-color: var(--bg-color);
             padding: 40px;
@@ -25,11 +27,13 @@
             width: 400px;
             text-align: center;
         }
+
         h1 {
             font-size: 24px;
             margin-bottom: 20px;
             color: #333;
         }
+
         label {
             font-size: 16px;
             color: #555;
@@ -37,6 +41,7 @@
             display: block;
             text-align: left;
         }
+
         input[type="file"] {
             width: 100%;
             padding: 12px;
@@ -45,6 +50,7 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
+
         button {
             background-color: #4CAF50;
             color: white;
@@ -55,9 +61,11 @@
             cursor: pointer;
             width: 100%;
         }
+
         button:hover {
             background-color: #45a049;
         }
+
         .error {
             color: red;
             font-size: 14px;
@@ -65,6 +73,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <header>
@@ -73,74 +82,101 @@
                 <img src="https://i.ibb.co/V0gNgWqd/Untitled.png" class="logo" alt="FlowBite Logo" />
             </div>
             <div class="menu-icon" onclick="toggleMenu()">☰</div>
-    
-    
-    
             <div class="menu-links">
                 <a class="nav-btn" href="{{ url_for('home')}}">Home</a>
-                <a class="nav-btn" href="#">Features</a>
+
+                <!-- Features with Dropdown -->
+                <div class="dropdown">
+                    <a class="nav-btn" href="#" onclick="toggleDropdown(event)">Features ▼</a>
+                    <div class="dropdown-content" id="featuresDropdown">
+                        <a href="{{ url_for('translator')}}">Translator</a>
+                        <a href="{{ url_for('convert_pdf')}}">PDF to Word</a>
+                        <a href="{{ url_for('convert_word_to_pdf')}}">Word to PDF</a>
+                        <a href="{{ url_for('convert_image_to_pdf')}}">Image to PDF</a>
+                        <a href="{{ url_for('convert_excel_to_pdf')}}">Excel to PDF</a>
+                        <a href="{{ url_for('compress_pdf')}}">Compress PDF</a>
+                        <a href="{{ url_for('pdf_to_image')}}">PDF to Image</a>
+                        <a href="{{ url_for('merge_pdfs')}}">Merge PDFs</a>
+                        <a href="{{ url_for('split_pdf')}}">Split PDFs</a>
+                    </div>
+                </div>
+
                 <a class="nav-btn" href="{{ url_for('about') }}">About</a>
-                <a class="nav-btn" href="#">Contact</a>
                 <a class="nav-btn" href="{{ url_for('feedback') }}">Feedback</a>
                 <div class="login">
                     <a class="login-btn" style="color: var(--bg-color);" href="{{ url_for('logout') }}">Logout</a>
                 </div>
             </div>
-    </header>
-    
-    <section class="body-container">
-    <div class="container">
-        <h1>Convert Word to PDF</h1>
-        <form method="POST" enctype="multipart/form-data">
-            <div class="box" id="drop-zone">
-            <input type="file" name="word_file" id="word_file" accept=".docx, .doc" hidden required>
-            <span>Drag and drop a Word file or click to select</span>
-            </div>
-            <div class="form-btn">
-            <button type="submit" class="submit">Convert</button>
-            </div>
-            
-        </form>
-        <div class="bottom">
-            <p>Need help? <a href="/help">Contact Support</a></p>
         </div>
-        {% if error %}
+    </header>
+
+    <section class="body-container">
+        <div class="container">
+            <h1>Convert Word to PDF</h1>
+            <form method="POST" enctype="multipart/form-data">
+                <div class="box" id="drop-zone">
+                    <input type="file" name="word_file" id="word_file" accept=".docx, .doc" hidden required>
+                    <span>Drag and drop a Word file or click to select</span>
+                </div>
+                <div class="form-btn">
+                    <button type="submit" class="submit">Convert</button>
+                </div>
+
+            </form>
+            <div class="bottom">
+                <p>Need help? <a href="/help">Contact Support</a></p>
+            </div>
+            {% if error %}
             <p class="error">{{ error }}</p>
-        {% endif %}
-    </div>
+            {% endif %}
+        </div>
     </section>
     <script>
-          const dropZone = document.getElementById("drop-zone");
-            const fileInput = document.getElementById("word_file");
-            const fileInfo = document.getElementById("file-info");
+        const dropZone = document.getElementById("drop-zone");
+        const fileInput = document.getElementById("word_file");
+        const fileInfo = document.getElementById("file-info");
 
-            dropZone.addEventListener("click", () => fileInput.click());
-            fileInput.addEventListener("change", updateFileInfo);
+        dropZone.addEventListener("click", () => fileInput.click());
+        fileInput.addEventListener("change", updateFileInfo);
 
-            dropZone.addEventListener("dragover", (event) => {
-                event.preventDefault();
-                dropZone.classList.add("dragover");
-            });
+        dropZone.addEventListener("dragover", (event) => {
+            event.preventDefault();
+            dropZone.classList.add("dragover");
+        });
 
-            dropZone.addEventListener("dragleave", () => {
-                dropZone.classList.remove("dragover");
-            });
+        dropZone.addEventListener("dragleave", () => {
+            dropZone.classList.remove("dragover");
+        });
 
-            dropZone.addEventListener("drop", (event) => {
-                event.preventDefault();
-                dropZone.classList.remove("dragover");
-                const file = event.dataTransfer.files[0];
-                fileInput.files = event.dataTransfer.files;
-                updateFileInfo();
-            });
+        dropZone.addEventListener("drop", (event) => {
+            event.preventDefault();
+            dropZone.classList.remove("dragover");
+            const file = event.dataTransfer.files[0];
+            fileInput.files = event.dataTransfer.files;
+            updateFileInfo();
+        });
 
-            function updateFileInfo() {
-                if (fileInput.files.length > 0) {
-                    fileInfo.textContent = `Selected file: ${fileInput.files[0].name}`;
-                } else {
-                    fileInfo.textContent = "No file selected";
-                }
+        function updateFileInfo() {
+            if (fileInput.files.length > 0) {
+                fileInfo.textContent = `Selected file: ${fileInput.files[0].name}`;
+            } else {
+                fileInfo.textContent = "No file selected";
             }
+        } function toggleDropdown(event) {
+            event.preventDefault(); // Prevent default anchor action
+            let dropdown = document.getElementById("featuresDropdown");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", function (event) {
+            let dropdown = document.getElementById("featuresDropdown");
+            if (!event.target.closest(".dropdown")) {
+                dropdown.style.display = "none";
+            }
+        });
+
     </script>
 </body>
+
 </html>
