@@ -638,6 +638,10 @@ def calculate_result(user_input, start_time, end_time, difficulty):
         'correct_words': correct_count
     })
 
+@app.route('/terms')
+def terms():
+    return render_template('terms.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
