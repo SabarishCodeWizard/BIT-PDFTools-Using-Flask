@@ -3,94 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms and Conditions | BIT Translator & PDF Tools</title>
+    <title>Terms and Conditions</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 20px;
-            max-width: 800px;
-            margin: auto;
-            background-color: #f8f8f8;
-        }
-        h1, h2 {
-            color: #333;
-        }
-        p {
-            line-height: 1.6;
-            color: #555;
-        }
-        a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
+        body { font-family: Arial, sans-serif; margin: 20px; padding: 20px; max-width: 800px; background-color: #f8f8f8; }
+        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }
+        h1 { color: #333; }
+        p { line-height: 1.6; color: #555; }
+        button { padding: 10px 20px; font-size: 16px; background: #007bff; color: white; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
     </style>
 </head>
 <body>
 
     <div class="container">
         <h1>Terms and Conditions</h1>
-        <p><strong>Last Updated:</strong>01-02-2025</p>
+        <p>Please read and accept the terms before proceeding.</p>
+        <p>By using BIT Translator & PDF Tools, you agree to comply with our Terms and Conditions.</p>
 
-        <p>Welcome to <strong>BIT Translator & PDF Tools</strong>. By using our services at 
-        <a href="https://bittranslator.pythonanywhere.com/">bittranslator.pythonanywhere.com</a>, 
-        you agree to these Terms and Conditions. If you do not agree, please discontinue use.</p>
-
-        <h2>1. Acceptance of Terms</h2>
-        <p>By accessing or using our services, you acknowledge that you have read and agreed to these terms.</p>
-
-        <h2>2. Services Provided</h2>
-        <p>Our web application offers various PDF and translation tools, including:</p>
-        <ul>
-            <li>PDF conversions (Word to PDF, PDF to Word, Image to PDF, PDF to Image, Excel to PDF)</li>
-            <li>PDF tools (Compression, Merging, Splitting)</li>
-            <li>Language translation with history and favorites</li>
-            <li>User authentication (login/logout)</li>
-            <li>Feedback and user support</li>
-        </ul>
-        <p>Services are provided <strong>as-is</strong> without guarantees of accuracy or availability.</p>
-
-        <h2>3. User Responsibilities</h2>
-        <p>By using our platform, you agree to:</p>
-        <ul>
-            <li>Not upload or process illegal or copyrighted materials.</li>
-            <li>Not use the service for fraudulent or malicious activities.</li>
-            <li>Ensure uploaded files do not contain harmful content (e.g., viruses, malware).</li>
-        </ul>
-        <p>We reserve the right to restrict access or remove content violating these terms.</p>
-
-        <h2>4. Intellectual Property</h2>
-        <p>All content, code, and services are owned by us or licensed for use. You may not copy, modify, or redistribute any part of our services without permission.</p>
-
-        <h2>5. Privacy & Data Handling</h2>
-        <p>- We do <strong>not</strong> store user-uploaded files permanently.</p>
-        <p>- We collect minimal user data for authentication and analytics.
-
-        <h2>6. Limitation of Liability</h2>
-        <p>BIT Translator & PDF Tools shall not be liable for:</p>
-        <ul>
-            <li>Loss of data due to technical failures.</li>
-            <li>Direct or indirect damages from service use.</li>
-            <li>Third-party service interruptions or security risks.</li>
-        </ul>
-
-        <h2>7. Modifications & Termination</h2>
-        <p>We reserve the right to modify these terms or discontinue services at any time without notice.</p>
-
-
-
-        <h2>8. Contact Information</h2>
-        <p>For questions, contact us:</p>
-        <p>📧 <strong>Email:</strong> supportbittools@gmail.com</p>
-        <p>🌐 <strong>Website:</strong> <a href="https://bittranslator.pythonanywhere.com/">bittranslator.pythonanywhere.com</a></p>
-
-        <p><strong>By continuing to use our services, you accept these Terms and Conditions.</strong></p>
+        <form action="{{ url_for('terms') }}" method="POST">
+            <button type="submit">Accept and Continue</button>
+        </form>
     </div>
 
 </body>
