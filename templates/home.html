@@ -566,7 +566,12 @@
                                 <a href="{{ url_for('privacy') }}" class="hover:underline">Privacy Policy</a>
                             </li>
                             <li>
-                                <a href="{{ url_for('accept') }}" class="hover:underline">Terms &amp; Conditions</a>
+                                <a href="{{ url_for('accept') }}" class="hover:underline" id="terms-link">
+                                    <span id="point-hand">👉</span>
+                                    Terms & Conditions
+                                    
+                                </a>
+                                
                             </li>
                         </ul>
                     </div>
@@ -619,6 +624,45 @@
     </footer>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <style>
+        #point-hand {
+            display: inline-block;
+            font-size: 20px;
+            margin-left: 5px;
+            animation: point-animation 1s infinite alternate ease-in-out;
+        }
+    
+        @keyframes point-animation {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(10px); }
+        }
+    </style>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (!sessionStorage.getItem("visitedHomePage")) {
+            let termsLink = document.getElementById("terms-link");
+            let pointHand = document.getElementById("point-hand");
+
+            if (termsLink) {
+                // Scroll smoothly to the Terms & Conditions link
+                termsLink.scrollIntoView({ behavior: "smooth", block: "center" });
+
+                // Highlight the link
+                termsLink.style.color = "#ff4500"; // Orange highlight
+                termsLink.style.fontWeight = "bold";
+
+                // Keep the hand animation for a few seconds and then remove it
+                setTimeout(() => {
+                    pointHand.style.display = "none";
+                }, 5000); // Remove hand animation after 5 seconds
+            }
+
+            // Mark that the user has visited the home page
+            sessionStorage.setItem("visitedHomePage", "true");
+        }
+    });
+</script>
+    
 </body>
 
 </html>
