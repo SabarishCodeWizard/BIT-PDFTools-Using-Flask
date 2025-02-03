@@ -5,11 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BIT Tools - PDF & More</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <!-- Swiper JS -->
@@ -45,9 +46,9 @@
             </div>
     </header>
 
-    <div class="project-description">
-        <p>BIT Tools offers a variety of utilities for working with PDFs and other document formats.</p>
-    </div>
+        <div class="text-animate">
+        <h3>BIT Tools offers a variety of utilities for working with PDFs and other document formats.</h3>
+        </div>
 
     <div class="container">
         <div class="feature-container">
@@ -100,7 +101,7 @@
                     </g>
                 </svg>
                 </div>
-                <h3 style="margin-top: 0px;">Typing Game</h3>
+                <h3 style="margin-bottom: 10px;">Typing Game</h3>
                 <div class="game-options">
                     <!-- Desktop buttons -->
                     <div class="button-group">
