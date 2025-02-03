@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
 
-:root {
-            --bg-color: #222831;
-            --text-color: #00ADB5;
-            --main-color: #393E46;
-            --secondary-bg-color: #EEEEEE;
+   :root {
+            --bg-color: #F8F9FA;
+            --text-color: #333;
+            --main-color: #e2e9f0;
+            --secondary-bg-color: #e2e9f0;
         }
 
         body {
@@ -26,7 +26,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: 90vh;
         }
 
         .container {
@@ -42,8 +42,9 @@
         h1 {
             font-size: 2rem;
             margin-bottom: 1.5rem;
-            color: var(--text-color)    ;
+            color: #D32F2F;
         }
+
         form {
             /* display: flex; */
             flex-direction: column;
@@ -52,7 +53,6 @@
 
         .box {
             position: relative;
-            width: 80%;
             margin-bottom: 1rem;
         }
 
@@ -64,9 +64,8 @@
             background-color: var(--bg-color);
             border-radius: 5px;
             outline: none;
-            color: #fff;
+            color: var(--bg-color);
             font-size: 1em;
-
         }
 
         .box span {
@@ -76,7 +75,7 @@
             transform: translateY(-50%);
             pointer-events: none;
             font-size: 10px;
-            color: var(--secondary-bg-color);
+            color: var(--text-color1);
             text-transform: uppercase;
             font-weight: 500;
             margin-left: 10px;
@@ -100,23 +99,22 @@
             border: 1px solid var(--main-color);
         }
 
-        button {
-            padding: 0.8rem;
-            font-size: 1rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 1rem;
-            color: #fff;
-            transition: background-color 0.3s, transform 0.3s;
-        }
+
 
         .submit {
-            background: linear-gradient(45deg, #00ADB5, #009688);
+            background:#D32F2F; 
             padding: 10px;
             width: 50%;
             align-items: center;
+            border-radius: 10px;
+            border-style: none;
         }
+
+        .submit:hover {
+  background-color: #B71C1C;
+  box-shadow: 0px 0px 10px 13px rgba(204, 25, 25, 0.1);
+}
+
         .bottom {
             display: flex;
             flex-direction: column;
@@ -129,7 +127,7 @@
         }
 
         a {
-            color: var(--secondary-bg-color);
+            color: rgb(58, 58, 139);
             text-decoration: underline;
             font-size: 13px;
         }
