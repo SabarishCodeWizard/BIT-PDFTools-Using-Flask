@@ -16,3 +16,4 @@ fitz
 frontend
 tools
 python-dotenv
+gunicorn
