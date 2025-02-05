@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML to JSX Converter</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prettier/2.8.8/standalone.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prettier/2.8.8/parser-babel.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #ffffff;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #d32f2f;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            margin-bottom: 10px;
+            font-family: monospace;
+            font-size: 14px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+            background: #fff;
+            color: #333;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            background-color: #d32f2f;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        button i {
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #b71c1c;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .output-container {
+            background: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            overflow-x: auto;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin-top: 15px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s, transform 0.5s;
+            position: relative;
+        }
+
+        .output-container.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #555;
+            transition: transform 0.2s ease-in-out, color 0.3s;
+        }
+
+        .copy-btn:hover {
+            color: #222;
+        }
+
+        .copy-btn.clicked {
+            transform: scale(0.8);
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .drop-zone {
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .drop-zone.dragover {
+            background-color: #e9f5ff;
+            border-color: #007bff;
+        }
+
+        .drop-zone span {
+            display: block;
+            margin-top: 5px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>HTML to JSX Converter</h1>
+    <div class="button-container">
+        <div class="drop-zone" id="dropZone" tabindex="0">
+            <i class="fas fa-cloud-upload-alt fa-3x"></i>
+            <span>Drag and drop an HTML file or click to select</span>
+        </div>
+        <input type="file" id="fileInput" accept=".html">
+        <button id="convertBtn" aria-label="Convert HTML to JSX"><i class="fas fa-sync-alt"></i> Convert</button>
+    </div>
+    <textarea id="htmlInput" placeholder="Paste your HTML code here or select the file." aria-label="HTML Input"></textarea>
+    <div class="output-container" id="outputBox">
+        <button id="copyBtn" class="copy-btn" aria-label="Copy JSX"><i class="fas fa-copy"></i></button>
+        <pre><code id="jsxOutput">JSX output will appear here...</code></pre>
+    </div>
+    <button id="downloadBtn" class="download-btn" style="display:none;" aria-label="Download JSX"><i class="fas fa-download"></i> Download JSX</button>
+</div>
+<script>
+    function convertHTMLtoJSX(html) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        function processNode(node) {
+            if (node.nodeType === Node.TEXT_NODE) {
+                return node.nodeValue.trim() ? node.nodeValue : '';
+            }
+            if (node.nodeType !== Node.ELEMENT_NODE) {
+                return '';
+            }
+
+            const tagName = node.tagName.toLowerCase();
+            let jsx = `<${tagName}`;
+
+            Array.from(node.attributes).forEach(attr => {
+                let name = attr.name;
+                let value = attr.value;
+
+                if (name === 'class') name = 'className';
+                if (name === 'for') name = 'htmlFor';
+
+                if (name === 'style') {
+                    const styleObject = value.split(';').reduce((styles, rule) => {
+                        let [key, val] = rule.split(':');
+                        if (key && val) {
+                            key = key.trim().replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+                            val = val.trim();
+                            styles[key] = val;
+                        }
+                        return styles;
+                    }, {});
+                    value = `{ ${JSON.stringify(styleObject).replace(/"([^"]+)":/g, '$1:')} }`;
+                } else if (["checked", "disabled", "readonly", "required"].includes(name)) {
+                    value = `{true}`;
+                } else {
+                    value = `"${value}"`;
+                }
+
+                jsx += ` ${name}=${value}`;
+            });
+
+            const selfClosingTags = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'];
+            if (selfClosingTags.includes(tagName)) {
+                jsx += ' />';
+                return jsx;
+            }
+
+            jsx += '>';
+            jsx += Array.from(node.childNodes).map(processNode).join('');
+            jsx += `</${tagName}>`;
+
+            return jsx;
+        }
+
+        const jsxOutput = Array.from(doc.body.childNodes).map(processNode).join('\n');
+        return jsxOutput;
+    }
+
+    // Convert button click handler
+    document.getElementById('convertBtn').addEventListener('click', function() {
+        const htmlInput = document.getElementById('htmlInput').value;
+        if (htmlInput.trim()) {
+            const jsxOutput = convertHTMLtoJSX(htmlInput);
+            const outputBox = document.getElementById('outputBox');
+            document.getElementById('jsxOutput').textContent = jsxOutput;
+            outputBox.classList.add('show');
+            document.getElementById('downloadBtn').style.display = 'inline-block';
+        } else {
+            alert('Please enter or upload HTML content');
+        }
+    });
+
+    // File upload handler
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const htmlContent = e.target.result;
+                document.getElementById('htmlInput').value = htmlContent;
+
+                // Convert to JSX after file is loaded
+                const jsxOutput = convertHTMLtoJSX(htmlContent);
+                document.getElementById('jsxOutput').textContent = jsxOutput;
+                document.getElementById('outputBox').classList.add('show');
+                document.getElementById('downloadBtn').style.display = 'inline-block';
+            };
+            reader.readAsText(file);
+        }
+    });
+
+    // Drag and drop handler
+    const dropZone = document.getElementById('dropZone');
+    dropZone.addEventListener('click', () => document.getElementById('fileInput').click());
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+    });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const htmlContent = e.target.result;
+                document.getElementById('htmlInput').value = htmlContent;
+
+                // Convert to JSX after file is loaded
+                const jsxOutput = convertHTMLtoJSX(htmlContent);
+                document.getElementById('jsxOutput').textContent = jsxOutput;
+                document.getElementById('outputBox').classList.add('show');
+                document.getElementById('downloadBtn').style.display = 'inline-block';
+            };
+            reader.readAsText(file);
+        }
+    });
+
+    // Copy button functionality
+    document.getElementById('copyBtn').addEventListener('click', function() {
+        const jsxText = document.getElementById('jsxOutput').textContent;
+        navigator.clipboard.writeText(jsxText).then(() => {
+            this.classList.add('clicked');
+            setTimeout(() => this.classList.remove('clicked'), 300);
+        });
+    });
+
+    // Download button functionality
+    document.getElementById('downloadBtn').addEventListener('click', function() {
+        const jsxText = document.getElementById('jsxOutput').textContent;
+        const blob = new Blob([jsxText], { type: 'text/plain' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'convertedCode.jsx';  // Name of the file
+        link.click();
+    });
+</script>
+
+</body>
+</html>
