@@ -58,7 +58,7 @@ paragraphs = {
     ]
 }
 
-ZERO_BOUNCE_API_KEY = "your_zero_bounce_api_key"
+ZERO_BOUNCE_API_KEY = "1a9c6c81e36b47209bc393a30fba1a8f"
 
 # Initialize Flask app
 app = Flask(__name__)
