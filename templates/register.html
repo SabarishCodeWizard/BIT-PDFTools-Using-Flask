@@ -7,8 +7,7 @@
     <title>Register</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
-
-   :root {
+        :root {
             --bg-color: #F8F9FA;
             --text-color: #333;
             --main-color: #e2e9f0;
@@ -102,7 +101,7 @@
 
 
         .submit {
-            background:#D32F2F; 
+            background: #D32F2F;
             padding: 10px;
             width: 50%;
             align-items: center;
@@ -111,9 +110,9 @@
         }
 
         .submit:hover {
-  background-color: #B71C1C;
-  box-shadow: 0px 0px 10px 13px rgba(204, 25, 25, 0.1);
-}
+            background-color: #B71C1C;
+            box-shadow: 0px 0px 10px 13px rgba(204, 25, 25, 0.1);
+        }
 
         .bottom {
             display: flex;
@@ -131,6 +130,7 @@
             text-decoration: underline;
             font-size: 13px;
         }
+
         a:hover {
             text-decoration: underline;
         }
@@ -170,7 +170,7 @@
         // Import the necessary Firebase functions
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
-    
+
         // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyChW576jwvVZYQJ6Fy1NPthH5eBeTf3WLI",
@@ -181,29 +181,49 @@
             appId: "1:338629626503:web:c9a9f2767f112d1ec88622",
             measurementId: "G-1H16RJE596"
         };
-    
+
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-    
-        // Register form logic
+
+        async function validateEmail(email) {
+            const apiKey = "your_zero_bounce_api_key";
+            const url = `https://api.zerobounce.net/v2/validate?api_key=${apiKey}&email=${email}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                return data.status === "valid";
+            } catch (error) {
+                console.error("Email validation failed:", error);
+                return false;
+            }
+        }
+
         document.getElementById('register-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const phone = document.getElementById('phone').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
-    
+
             if (password !== confirmPassword) {
                 alert('Passwords do not match.');
                 return;
             }
-    
+
+            const isValidEmail = await validateEmail(email);
+            if (!isValidEmail) {
+                alert("Invalid email address. Please enter a valid email.");
+                return;
+            }
+
             try {
                 // Register the user
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                // Update the user's profile
                 await updateProfile(userCredential.user, { displayName: name });
                 alert('Registration successful! Please login.');
                 window.location.href = '/login';
@@ -211,6 +231,7 @@
                 alert(error.message);
             }
         });
+
     </script>
 </body>
 

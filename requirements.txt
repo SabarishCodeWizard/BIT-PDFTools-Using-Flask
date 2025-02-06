@@ -12,7 +12,7 @@ img2pdf
 openpyxl
 docx2pdf
 reportlab
-fitz
+fitzqr
 frontend
 tools
 python-dotenv

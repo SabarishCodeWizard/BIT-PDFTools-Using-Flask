@@ -58,6 +58,8 @@ paragraphs = {
     ]
 }
 
+ZERO_BOUNCE_API_KEY = "your_zero_bounce_api_key"
+
 # Initialize Flask app
 app = Flask(__name__)
 app.secret_key = "adfasfasasdf"
@@ -232,6 +234,16 @@ def about():
 
 
 
+def validate_email(email):
+    url = f"https://api.zerobounce.net/v2/validate?api_key={ZERO_BOUNCE_API_KEY}&email={email}"
+    response = requests.get(url)
+    data = response.json()
+    
+    # Check if email is valid
+    if data.get("status") == "valid":
+        return True
+    return False
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -243,6 +255,10 @@ def register():
 
         if password != confirm_password:
             return render_template('register.html', error='Passwords do not match.')
+
+        # Validate email with ZeroBounce
+        if not validate_email(email):
+            return render_template('register.html', error='Invalid email address. Please enter a valid email.')
 
         try:
             # Create a Firebase user
@@ -261,6 +277,7 @@ def register():
             return render_template('register.html', error=str(e))
 
     return render_template('register.html')
+
 
 def send_thank_you_email(user_email, user_name):
     # Email credentials
