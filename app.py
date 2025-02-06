@@ -8,6 +8,7 @@ from googletrans import Translator
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import logging
+import time
 import csv
 from io import StringIO
 from werkzeug.utils import secure_filename
@@ -688,6 +689,23 @@ def accept():
 @app.route('/htmlConverter')
 def htmlConverter():
     return render_template('htmlConverter.html')
+
+
+def keep_alive():
+    while True:
+        try:
+            response = requests.get("https://bittools.onrender.com/")
+            print(f"Keep-alive ping: {response.status_code}")
+        except Exception as e:
+            print(f"Error in keep-alive: {e}")
+        time.sleep(180)  # Ping every 3 minutes
+
+
+
+# Start keep-alive thread
+threading.Thread(target=keep_alive, daemon=True).start()
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
