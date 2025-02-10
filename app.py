@@ -3,7 +3,7 @@ from flask_session import Session
 import random
 import requests
 import firebase_admin
-from firebase_admin import credentials, auth
+from firebase_admin import credentials, auth , firestore
 from googletrans import Translator
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -76,6 +76,7 @@ Session(app)
 # Firebase setup
 cred = credentials.Certificate("translator-f9772-firebase-adminsdk-ybzox-3d49d5b518.json")
 firebase_admin.initialize_app(cred)
+db = firestore.client()  # Firestore database
 
 # Initialize Google Translator
 translator = Translator()
@@ -705,6 +706,33 @@ def keep_alive():
 # Start keep-alive thread
 threading.Thread(target=keep_alive, daemon=True).start()
 
+
+@app.route('/blog', methods=['GET', 'POST'])
+def blog():
+    if 'user_email' not in session:
+        return redirect(url_for('login'))  # Redirect to login if user is not authenticated
+
+    if request.method == 'POST':
+        title = request.form['title']
+        content = request.form['content']
+        user_email = session['user_email']  # Get logged-in user's email
+
+        blog_data = {
+            "title": title,
+            "content": content,
+            "author": user_email,
+            "timestamp": datetime.datetime.utcnow()  # Store time of posting
+        }
+
+        db.collection("blogs").add(blog_data)  # Save blog to Firestore
+
+        return redirect(url_for('blog'))  # Refresh the blog page
+
+    # Fetch all blogs from Firestore
+    blogs = db.collection("blogs").order_by("timestamp", direction=firestore.Query.DESCENDING).stream()
+    blog_list = [{"title": b.to_dict()["title"], "content": b.to_dict()["content"], "author": b.to_dict()["author"]} for b in blogs]
+
+    return render_template('blog.html', blogs=blog_list)
 
 
 if __name__ == '__main__':
