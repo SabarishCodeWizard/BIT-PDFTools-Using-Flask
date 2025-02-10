@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Blog | BIT Translator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #0056b3;
+        }
+        form {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .blog {
+            text-align: left;
+            background: #fafafa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .author {
+            font-size: 14px;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Post a Blog</h1>
+        <form method="POST">
+            <input type="text" name="title" placeholder="Enter Blog Title" required>
+            <textarea name="content" placeholder="Write your blog content here..." rows="5" required></textarea>
+            <button type="submit">Post</button>
+        </form>
+
+        <h2>Recent Blogs</h2>
+        {% for blog in blogs %}
+            <div class="blog">
+                <h3>{{ blog.title }}</h3>
+                <p>{{ blog.content }}</p>
+                <p class="author">Posted by {{ blog.author }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+</body>
+</html>
