@@ -670,6 +670,28 @@ def calculate_result(user_input, start_time, end_time, difficulty):
         'correct_words': correct_count
     })
 
+@app.route('/shorten', methods=['GET', 'POST'])
+def shorten():
+    short_url = None
+    error = None
+
+    if request.method == 'POST':
+        long_url = request.form['long_url']
+
+        if long_url:
+            try:
+                # Use is.gd API (alternative to TinyURL)
+                response = requests.get(f'https://is.gd/create.php?format=simple&url={long_url}')
+                
+                if response.status_code == 200:
+                    short_url = response.text  # Get shortened URL
+                else:
+                    error = "Failed to shorten URL."
+            except Exception as e:
+                error = f"Error: {str(e)}"
+
+    return render_template('shorten.html', short_url=short_url, error=error)
+
 
 @app.route('/terms', methods=['GET', 'POST'])
 def terms():
@@ -705,34 +727,6 @@ def keep_alive():
 
 # Start keep-alive thread
 threading.Thread(target=keep_alive, daemon=True).start()
-
-
-# @app.route('/blog', methods=['GET', 'POST'])
-# def blog():
-#     if 'user_email' not in session:
-#         return redirect(url_for('login'))  # Redirect to login if user is not authenticated
-
-#     if request.method == 'POST':
-#         title = request.form['title']
-#         content = request.form['content']
-#         user_email = session['user_email']  # Get logged-in user's email
-
-#         blog_data = {
-#             "title": title,
-#             "content": content,
-#             "author": user_email,
-#             "timestamp": datetime.datetime.utcnow()  # Store time of posting
-#         }
-
-#         db.collection("blogs").add(blog_data)  # Save blog to Firestore
-
-#         return redirect(url_for('blog'))  # Refresh the blog page
-
-#     # Fetch all blogs from Firestore
-#     blogs = db.collection("blogs").order_by("timestamp", direction=firestore.Query.DESCENDING).stream()
-#     blog_list = [{"title": b.to_dict()["title"], "content": b.to_dict()["content"], "author": b.to_dict()["author"]} for b in blogs]
-
-#     return render_template('blog.html', blogs=blog_list)
 
 
 if __name__ == '__main__':
