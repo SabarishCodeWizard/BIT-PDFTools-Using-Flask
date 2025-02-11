@@ -35,7 +35,7 @@ from docx2pdf import convert
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import openpyxl
-import pymupdf
+import fitz  # PyMuPDF
 from dotenv import load_dotenv
 
 
