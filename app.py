@@ -1,5 +1,6 @@
 from flask import Flask,flash, render_template, request, redirect, url_for, session, jsonify, make_response,send_file
 from flask_session import Session
+import qrcode
 import random
 import requests
 import firebase_admin
@@ -670,6 +671,30 @@ def calculate_result(user_input, start_time, end_time, difficulty):
         'correct_words': correct_count
     })
 
+# Function to Shorten URL using is.gd
+def shorten_url(long_url):
+    api_url = f"https://is.gd/create.php?format=simple&url={long_url}"
+    try:
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            return response.text  # Returns the shortened URL
+    except Exception as e:
+        return None
+
+# Generate QR Code for the Shortened URL
+@app.route('/generate_qr', methods=['GET'])
+def generate_qr():
+    url = request.args.get('url')
+    if not url:
+        return "Missing URL", 400
+    
+    qr = qrcode.make(url)
+    img_io = io.BytesIO()
+    qr.save(img_io, format='PNG')
+    img_io.seek(0)
+    return send_file(img_io, mimetype='image/png')
+
+# Main Route for URL Shortening
 @app.route('/shorten', methods=['GET', 'POST'])
 def shorten():
     short_url = None
@@ -677,20 +702,14 @@ def shorten():
 
     if request.method == 'POST':
         long_url = request.form['long_url']
-
+        
         if long_url:
-            try:
-                # Use is.gd API (alternative to TinyURL)
-                response = requests.get(f'https://is.gd/create.php?format=simple&url={long_url}')
-                
-                if response.status_code == 200:
-                    short_url = response.text  # Get shortened URL
-                else:
-                    error = "Failed to shorten URL."
-            except Exception as e:
-                error = f"Error: {str(e)}"
-
+            short_url = shorten_url(long_url)
+            if not short_url:
+                error = "Failed to shorten URL."
+    
     return render_template('shorten.html', short_url=short_url, error=error)
+
 
 
 @app.route('/terms', methods=['GET', 'POST'])
