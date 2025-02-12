@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Shortener</title>
+    <title>URL Shortener with QR Code</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -46,6 +46,9 @@
             margin-top: 20px;
             font-size: 18px;
         }
+        .qr-code {
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
@@ -60,6 +63,11 @@
         {% if short_url %}
             <div class="result">
                 <p>Shortened URL: <a href="{{ short_url }}" target="_blank">{{ short_url }}</a></p>
+
+                <!-- QR Code Image -->
+                <div class="qr-code">
+                    <img src="{{ url_for('generate_qr', url=short_url) }}" alt="QR Code">
+                </div>
             </div>
         {% endif %}
 
