@@ -26,7 +26,7 @@
                 alert("Please enter a valid URL.");
                 return false;
             }
-            document.getElementById('loading-spinner').classList.remove('hidden');
+            document.getElementById('loading-container').classList.remove('hidden');
             return true;
         }
     </script>
@@ -41,14 +41,19 @@
             <input type="text" name="long_url" placeholder="Enter your long URL" required
                 class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none">
             <button type="submit"
-                class="w-full bg-red-600 text-white p-3 rounded-lg font-semibold hover:bg-red-700 transition">Shorten
-                URL</button>
+                class="w-full bg-red-600 text-white p-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-red-700 transition">
+                Shorten URL
+            </button>
 
-            <div id="loading-spinner" class="hidden text-center mt-2">
-                <svg class="animate-spin h-6 w-6 text-red-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            <!-- Loading Circle Progress Bar -->
+            <div id="loading-container" class="hidden flex justify-center mt-4">
+                <svg class="w-12 h-12 animate-spin" viewBox="0 0 50 50" fill="none">
+                    <circle cx="25" cy="25" r="20" stroke="#E5E7EB" stroke-width="5"></circle>
+                    <path fill="none" stroke="#DC2626" stroke-width="5" stroke-linecap="round"
+                        d="M25 5a20 20 0 0 1 20 20">
+                        <animateTransform attributeType="XML" attributeName="transform" type="rotate"
+                            from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite" />
+                    </path>
                 </svg>
             </div>
         </form>
@@ -59,9 +64,15 @@
             <a id="short-url" href="{{ short_url }}" target="_blank"
                 class="text-red-600 font-medium break-words hover:underline">{{ short_url }}</a>
 
+            <!-- Copy Button with Clipboard Icon -->
             <button onclick="copyToClipboard()"
-                class="mt-3 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition">Copy to
-                Clipboard</button>
+                class="mt-3 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-300 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                        d="M7 2a2 2 0 00-2 2v10a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zM6 4a1 1 0 011-1h6a1 1 0 011 1v10a1 1 0 01-1 1H7a1 1 0 01-1-1V4zm-3 2a1 1 0 011-1h1v10a3 3 0 003 3h6a3 3 0 003-3V6h1a1 1 0 011 1v10a3 3 0 01-3 3H7a3 3 0 01-3-3V6z" />
+                </svg>
+                Copy to Clipboard
+            </button>
 
             <div class="qr-code mt-4">
                 <img src="{{ url_for('generate_qr', url=short_url) }}" alt="QR Code"
