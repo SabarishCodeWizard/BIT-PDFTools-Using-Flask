@@ -748,5 +748,43 @@ def keep_alive():
 threading.Thread(target=keep_alive, daemon=True).start()
 
 
+# DeepSeek API Key (DO NOT expose it publicly)
+DEEPSEEK_API_KEY = "sk-1e62a60f6f3c441884ba3b829142dae4"
+
+# Function to call DeepSeek API
+def get_deepseek_response(prompt):
+    url = "https://api.deepseek.com/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "model": "deepseek-chat",  # You can change the model if needed
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0.7
+    }
+
+    try:
+        response = requests.post(url, headers=headers, json=data)
+        response_json = response.json()
+        
+        if "choices" in response_json:
+            return response_json["choices"][0]["message"]["content"]
+        else:
+            return "Error: No response from DeepSeek API."
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+# Flask Route for DeepSeek API
+@app.route('/deepseek', methods=['GET', 'POST'])
+def deepseek_chat():
+    response_text = None
+
+    if request.method == 'POST':
+        user_prompt = request.form['prompt']
+        response_text = get_deepseek_response(user_prompt)
+
+    return render_template('deepseek.html', response_text=response_text)
+
 if __name__ == '__main__':
     app.run(debug=True)

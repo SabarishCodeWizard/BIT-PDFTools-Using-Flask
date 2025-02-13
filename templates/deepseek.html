@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSeek AI Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 40px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        input, button {
+            width: 80%;
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .response {
+            margin-top: 20px;
+            font-size: 16px;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>DeepSeek AI Chat</h1>
+        <form method="POST">
+            <input type="text" name="prompt" placeholder="Ask DeepSeek something..." required>
+            <button type="submit">Get Response</button>
+        </form>
+
+        {% if response_text %}
+            <div class="response">
+                <strong>DeepSeek:</strong> {{ response_text }}
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>
