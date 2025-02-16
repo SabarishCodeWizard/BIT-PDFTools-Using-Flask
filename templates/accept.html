@@ -5,9 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms and Conditions | BIT Translator & PDF Tools</title>
     <style>
+        @page {
+            size: A4;
+            margin: 20mm;
+        }
         body {
             font-family: 'Georgia', serif;
-            background: url('https://www.toptal.com/designers/subtlepatterns/uploads/paper_fibers.png');
+            background: none;
             margin: 0;
             padding: 0;
             display: flex;
@@ -16,12 +20,14 @@
             min-height: 100vh;
         }
         .container {
+            width: 100%;
             max-width: 800px;
             background: rgba(255, 255, 255, 0.9);
             padding: 30px;
             border-radius: 10px;
             box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
             text-align: center;
+            page-break-inside: avoid;
         }
         h1, h2 {
             color: #333;
@@ -56,8 +62,6 @@
 <body>
     <div class="container">
         <h1>Terms and Conditions</h1>
-        <!-- <p><strong>Last Updated:</strong> 01-02-2025</p> -->
-        
         <p>Welcome to <strong>BIT Translator & PDF Tools</strong>. By using our services at <a href="https://bittranslator.pythonanywhere.com/">bittranslator.pythonanywhere.com</a>, you agree to these Terms and Conditions.</p>
         
         <h2>1. Acceptance of Terms</h2>
@@ -108,4 +112,3 @@
     </div>
 </body>
 </html>
-
