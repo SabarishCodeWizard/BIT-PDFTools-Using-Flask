@@ -130,26 +130,25 @@ header h1 {
 
 .login-btn {
   display: block;
-  padding: 12px 42px;
-  border-radius: 12px;
-  font-size: 1.25rem;
+  padding: 8px 24px; /* Reduced padding */
+  border-radius: 8px; /* Slightly smaller radius */
+  font-size: 1rem; /* Reduced font size */
   background: hsl(345deg 100% 47%);
   color: white;
-  transform: translateY(-6px);
+  transform: translateY(-4px); /* Adjusted translate effect */
 }
+
 .login-btn:active {
-  transform: translateY(-2px);
+  transform: translateY(-1px); /* Subtle press effect */
 }
-.login:active {
-  transform: translateY(-2px);
-}
+
 .login {
   background: hsl(340deg 100% 32%);
-  border-radius: 12px;
+  border-radius: 8px;
   border: none;
   padding: 0;
   cursor: pointer;
-  outline-offset: 4px;
+  outline-offset: 3px;
 }
 
 footer {
