@@ -19,7 +19,7 @@ body {
 header {
   background-color: var(--primary-color);
   /* padding: 10px; */
-  margin: 10px;
+  /* margin: 10px; */
   text-align: center;
   position: sticky;
   top: 0;
@@ -63,9 +63,6 @@ header h1 {
   margin-bottom: 20px;
 }
 
-.container:hover {
-  box-shadow: 17px 20px 14px 4px rgba(92, 69, 69, 0.1);
-}
 
 .feature-container {
   display: grid;
@@ -79,7 +76,7 @@ header h1 {
   padding: 30px;
   text-align: center;
   height: -webkit-fill-available;
-  border-radius: 10px;
+  border-radius: 5px;
   box-shadow: 17px 20px 14px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s;
   text-decoration: none;
@@ -88,7 +85,6 @@ header h1 {
 
 .feature-box:hover {
   transform: translateY(-5px);
-  box-shadow: 0px 0px 14px 14px rgba(204, 25, 25, 0.1);
 }
 
 .feature-box img {
