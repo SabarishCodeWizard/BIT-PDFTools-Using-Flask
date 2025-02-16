@@ -191,21 +191,26 @@ h1 {
 }
 
 .login-btn {
-  background-color: var(--primary-color);
-  color: var(--bg-color);
-  padding: 10px;
-  border-radius: 5px;
-  font-weight: bold;
-  text-decoration: none;
-  transition: background 0.3s;
+  display: block;
+  padding: 8px 24px; /* Reduced padding */
+  border-radius: 8px; /* Slightly smaller radius */
+  font-size: 1rem; /* Reduced font size */
+  background: hsl(345deg 100% 47%);
+  color: white;
+  transform: translateY(-4px); /* Adjusted translate effect */
 }
 
-.login-btn:hover {
-  background-color: var(--button-hover);
+.login-btn:active {
+  transform: translateY(-1px); /* Subtle press effect */
 }
 
 .login {
-  margin-left: auto;
+  background: hsl(340deg 100% 32%);
+  border-radius: 8px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline-offset: 3px;
 }
 .box {
   border: 2px dashed #ccc;

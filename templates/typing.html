@@ -106,7 +106,7 @@
                 <a class="nav-btn" href="{{ url_for('about') }}">About</a>
                 <a class="nav-btn" href="{{ url_for('feedback') }}">Feedback</a>
                 <div class="login">
-                    <a class="login-btn" style="color: var(--bg-color);" href="{{ url_for('logout') }}">Logout</a>
+                    <span class="login-btn" onclick="window.location.href='{{ url_for('logout') }}'">Logout</span>
                 </div>
             </div>
         </div>
