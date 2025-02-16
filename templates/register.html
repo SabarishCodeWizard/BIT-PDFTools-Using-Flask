@@ -101,17 +101,26 @@
 
 
         .submit {
-            background: #D32F2F;
-            padding: 10px;
-            width: 50%;
-            align-items: center;
-            border-radius: 10px;
-            border-style: none;
+            background: hsl(340deg 100% 32%);
+            border-radius: 12px;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            outline-offset: 4px;
         }
 
-        .submit:hover {
-            background-color: #B71C1C;
-            box-shadow: 0px 0px 10px 13px rgba(204, 25, 25, 0.1);
+        .front {
+            display: block;
+            padding: 12px 42px;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: hsl(345deg 100% 47%);
+            color: white;
+            transform: translateY(-6px);
+        }
+
+        .submit:active .front {
+            transform: translateY(-2px);
         }
 
         .bottom {
@@ -161,7 +170,11 @@
                 <input type="password" id="confirm-password" required />
                 <span>Confirm Password</span>
             </div>
-            <button type="submit" class="submit">Register</button>
+            <button class="submit" type="submit">
+                <span class="front">
+                    Register
+                </span>
+            </button>
         </form>
         <p>Already have an account? <a href="/login">Login</a></p>
     </div>

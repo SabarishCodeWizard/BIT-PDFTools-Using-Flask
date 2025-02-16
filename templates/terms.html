@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -62,62 +63,88 @@
             margin-top: 20px;
         }
 
-        button {
-            background: #007bff;
-            color: #fff;
-            font-size: 18px;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background: #0056b3;
-        }
-
         @media (max-width: 600px) {
             .container {
                 padding: 20px;
             }
+
             button {
                 width: 100%;
             }
         }
+
+        .submit {
+            background: hsl(140, 90%, 24%);
+            /* Dark Green */
+            border-radius: 12px;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            outline-offset: 4px;
+        }
+
+        .front {
+            display: block;
+            padding: 12px 42px;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: hsl(145, 94%, 35%);
+            /* Brighter Green */
+            color: white;
+            transform: translateY(-6px);
+        }
+
+        .submit:active .front {
+            transform: translateY(-2px);
+        }
     </style>
 </head>
+
 <body>
 
     <div class="container">
         <h1>Terms and Conditions</h1>
 
         <div class="terms-content">
-            <p>Welcome to <strong>BIT Translator & PDF Tools</strong>. By using our services at 
-            <a href="https://bittranslator.pythonanywhere.com/" target="_blank">bittranslator.pythonanywhere.com</a>, 
-            you agree to the following terms:</p>
+            <p>Welcome to <strong>BIT Translator & PDF Tools</strong>. By using our services at
+                <a href="https://bittranslator.pythonanywhere.com/"
+                    target="_blank">bittranslator.pythonanywhere.com</a>,
+                you agree to the following terms:
+            </p>
 
-            <p><strong>1. Services Provided:</strong> Our platform offers PDF conversions, compression, merging, splitting, and language translation with history and favorites.</p>
+            <p><strong>1. Services Provided:</strong> Our platform offers PDF conversions, compression, merging,
+                splitting, and language translation with history and favorites.</p>
 
-            <p><strong>2. User Responsibilities:</strong> Users must not upload illegal, copyrighted, or harmful content.</p>
+            <p><strong>2. User Responsibilities:</strong> Users must not upload illegal, copyrighted, or harmful
+                content.</p>
 
-            <p><strong>3. Privacy & Data Handling:</strong> We do not permanently store user-uploaded files and collect minimal data for authentication and analytics. See our <a href="{{ url_for('privacy') }}">Privacy Policy</a>.</p>
+            <p><strong>3. Privacy & Data Handling:</strong> We do not permanently store user-uploaded files and collect
+                minimal data for authentication and analytics. See our <a href="{{ url_for('privacy') }}">Privacy
+                    Policy</a>.</p>
 
-            <p><strong>4. Limitation of Liability:</strong> BIT Translator & PDF Tools is not responsible for data loss, damages, or third-party service interruptions.</p>
+            <p><strong>4. Limitation of Liability:</strong> BIT Translator & PDF Tools is not responsible for data loss,
+                damages, or third-party service interruptions.</p>
 
-            <p><strong>5. Modifications & Termination:</strong> We reserve the right to modify these terms or discontinue services without prior notice.</p>
+            <p><strong>5. Modifications & Termination:</strong> We reserve the right to modify these terms or
+                discontinue services without prior notice.</p>
 
-            <p><strong>6. Contact:</strong> For inquiries, reach out via Email: <a href="mailto:supportbittools@gmail.com">supportbittools@gmail.com</a></p>
+            <p><strong>6. Contact:</strong> For inquiries, reach out via Email: <a
+                    href="mailto:supportbittools@gmail.com">supportbittools@gmail.com</a></p>
 
             <p><strong>By continuing to use our services, you accept these Terms and Conditions.</strong></p>
         </div>
 
         <div class="button-container">
             <form action="{{ url_for('terms') }}" method="POST">
-                <button type="submit">Accept and Continue</button>
+                <button class="submit" type="submit">
+                    <span class="front">
+                        Accept and Continue
+                    </span>
+                </button>
             </form>
         </div>
     </div>
 
 </body>
+
 </html>
