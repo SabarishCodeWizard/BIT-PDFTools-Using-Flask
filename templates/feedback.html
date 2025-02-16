@@ -62,7 +62,6 @@
             box-shadow: 0px 0px 14px 14px rgba(27, 22, 22, 0.1);
         }
 
-
         .boxx input:valid~span,
         .boxx input:focus~span {
             color: var(--text-color);
@@ -94,6 +93,7 @@
         .form-container {
             display: flex;
             flex-direction: column;
+            text-align: center;
         }
 
         textarea {
@@ -111,6 +111,31 @@
             box-shadow: 0px 0px 14px 14px rgba(27, 22, 22, 0.1);
         }
 
+        .pushable {
+            width: 50%;
+            background: hsl(340deg 100% 32%);
+            border-radius: 12px;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            outline-offset: 4px;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .front {
+            display: block;
+            padding: 12px 42px;
+            border-radius: 12px;
+            font-size: 1.25rem;
+            background: hsl(345deg 100% 47%);
+            color: white;
+            transform: translateY(-6px);
+        }
+
+        .pushable:active .front {
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 
@@ -174,7 +199,7 @@
                         <button type="submit" class="submit">Submit</button>
                     </div> -->
                     <button class="pushable">
-                        <span class="front" type="submit" class="submit">
+                        <span class="front">
                             Submit
                         </span>
                     </button>
