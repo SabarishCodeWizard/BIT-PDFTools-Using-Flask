@@ -129,21 +129,27 @@ header h1 {
 }
 
 .login-btn {
-  background-color: var(--primary-color);
-  color: var(--bg-color);
-  padding: 10px;
-  border-radius: 5px;
-  font-weight: bold;
-  text-decoration: none;
-  transition: background 0.3s;
+  display: block;
+  padding: 12px 42px;
+  border-radius: 12px;
+  font-size: 1.25rem;
+  background: hsl(345deg 100% 47%);
+  color: white;
+  transform: translateY(-6px);
 }
-
-.login-btn:hover {
-  background-color: var(--button-hover);
+.login-btn:active {
+  transform: translateY(-2px);
 }
-
+.login:active {
+  transform: translateY(-2px);
+}
 .login {
-  margin-left: auto;
+  background: hsl(340deg 100% 32%);
+  border-radius: 12px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline-offset: 4px;
 }
 
 footer {
