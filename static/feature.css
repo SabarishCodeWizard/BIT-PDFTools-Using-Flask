@@ -107,27 +107,26 @@ h1 {
 }
 
 .submit {
-  display: block;
-  width: 60%;
-  background: var(--primary-color);
-  color: #fff;
+  background: hsl(340deg 100% 32%);
+  border-radius: 12px;
   border: none;
-  border-radius: 5px;
-  padding: 10px;
+  padding: 0;
   cursor: pointer;
-  font-size: 16px;
+  outline-offset: 4px;
 }
 
-.submit:hover {
-  background: var(--button-hover);
-  box-shadow: 0px 0px 10px 10px rgba(204, 25, 25, 0.1);
+.front {
+  display: block;
+  padding: 12px 42px;
+  border-radius: 12px;
+  font-size: 1rem;
+  background: hsl(345deg 100% 47%);
+  color: white;
+  transform: translateY(-6px);
 }
 
-.form-btn {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.submit:active .front {
+  transform: translateY(-2px);
 }
 
 .output-format {

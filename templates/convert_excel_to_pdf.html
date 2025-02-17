@@ -125,9 +125,14 @@
                     <span>Drag & Drop your Excel file here or click to upload</span>
                     <input type="file" name="excel_file" id="excel_file" accept=".xlsx, .xls" class="file-input">
                 </div>
-                <div class="form-btn">
+                <!-- <div class="form-btn">
                     <button type="submit" class="submit">Convert</button>
-                </div>
+                </div> -->
+                <button class="submit" type="submit">
+                    <span class="front">
+                        Convert
+                    </span>
+                </button>
             </form>
             {% if error %}
             <p class="error">{{ error }}</p>

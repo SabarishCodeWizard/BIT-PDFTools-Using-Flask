@@ -53,9 +53,14 @@
                 </div>
                 <input type="file" name="pdf_files" id="pdf_files" accept=".pdf" multiple hidden required>
                 <div class="file-list" id="file-list"></div>
-                <div class="form-btn">
+                <!-- <div class="form-btn">
                     <button type="submit" class="submit">Merge</button>
-                </div>
+                </div> -->
+                <button class="submit" type="submit">
+                    <span class="front">
+                        Merge
+                    </span>
+                </button>
             </form>
             {% if error %}
             <p class="error">{{ error }}</p>

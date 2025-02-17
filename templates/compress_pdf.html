@@ -52,9 +52,14 @@
                     <span>Drag & Drop your PDF file here or click to upload</span>
                     <input type="file" name="pdf_file" id="pdf_file" accept=".pdf" hidden required>
                 </div>
-                <div class="form-btn">
-                    <button type="submit" class="submit">Compress</button>
-                </div>
+                <!-- <button class="form-btn">
+                    <span type="submit" class="submit">Compress</span>
+                </button> -->
+                <button class="submit" type="submit">
+                    <span class="front">
+                        Compress
+                    </span>
+                </button>
             </form>
             <div class="progress-container" id="progressContainer" style="display: none;">
                 <svg class="progress-ring" width="150" height="150">
