@@ -29,10 +29,11 @@
     padding-right: 0px;
     padding-bottom: 0px;
     padding-left: 0px;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
 }
 
 .faq_7 .faq-head-bg {
-    background-color: #03a9f4;
+    background-color: hsl(345deg 100% 47%);
     color: white;
     padding-top: 80px;
     padding-right: 60px;
@@ -474,3 +475,4 @@ body {
         width: 100%;
     }
 }
+
