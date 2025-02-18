@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Uploader</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        input[type="file"] { margin: 10px; }
+        #preview { margin-top: 20px; }
+        img { max-width: 300px; display: none; }
+        #link-container { margin-top: 10px; display: none; }
+        #share-link { padding: 5px; border: 1px solid #ccc; width: 80%; }
+    </style>
+</head>
+<body>
+    <h1>Upload an Image</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" id="file-input" name="file" accept="image/*" required>
+        <button type="submit">Upload</button>
+    </form>
+    <div id="preview">
+        <p id="message"></p>
+        <img id="uploaded-image" src="" alt="Uploaded Image">
+    </div>
+    <div id="link-container">
+        <p>Shareable Link:</p>
+        <input type="text" id="share-link" readonly>
+        <button onclick="copyLink()">Copy</button>
+    </div>
+
+    <script>
+        document.getElementById("upload-form").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            let fileInput = document.getElementById("file-input");
+            if (fileInput.files.length === 0) {
+                alert("Please select an image.");
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            let response = await fetch("/upload", {
+                method: "POST",
+                body: formData
+            });
+
+            let result = await response.json();
+            if (result.success) {
+                document.getElementById("message").textContent = "Image uploaded successfully!";
+                
+                // Show uploaded image
+                let imgElement = document.getElementById("uploaded-image");
+                imgElement.src = result.url;
+                imgElement.style.display = "block";
+
+                // Show shareable link
+                document.getElementById("share-link").value = result.url;
+                document.getElementById("link-container").style.display = "block";
+            } else {
+                document.getElementById("message").textContent = "Upload failed: " + result.error;
+            }
+        });
+
+        function copyLink() {
+            let linkInput = document.getElementById("share-link");
+            linkInput.select();
+            document.execCommand("copy");
+            alert("Link copied to clipboard!");
+        }
+    </script>
+</body>
+</html>
