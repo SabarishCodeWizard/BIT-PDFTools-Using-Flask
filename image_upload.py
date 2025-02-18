@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, send_from_directory, json
 import os
 import uuid
 from werkzeug.utils import secure_filename
+import requests
 
 # Create a Blueprint for image upload
 image_upload_bp = Blueprint("image_upload", __name__)
@@ -35,7 +36,16 @@ def upload():
 
             # Generate a shareable link
             image_url = request.url_root + "images/" + unique_filename
-            return jsonify({"success": True, "url": image_url})
+
+            # Shorten the URL using is.gd API
+            short_url_response = requests.get(f"https://is.gd/create.php?format=simple&url={image_url}")
+            short_url = short_url_response.text
+
+            return jsonify({
+                "success": True,
+                "url": image_url,
+                "short_url": short_url
+            })
 
     return render_template("upload.html")
 

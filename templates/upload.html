@@ -113,6 +113,35 @@
             color: red;
             margin-top: 15px;
         }
+
+        /* Media queries for mobile view */
+        @media (max-width: 600px) {
+            body {
+                padding: 20px;
+            }
+
+            .container {
+                padding: 20px;
+                max-width: 100%;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            input[type="file"], button, #share-link, #copy-button {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            img {
+                max-width: 100%;
+            }
+
+            #share-link {
+                width: calc(100% - 80px);
+            }
+        }
     </style>
 </head>
 <body>
@@ -129,6 +158,11 @@
                 <p><strong>Shareable Link:</strong></p>
                 <input type="text" id="share-link" readonly>
                 <button id="copy-button">Copy Link</button>
+            </div>
+            <div id="short-link-container" style="margin-top: 15px; display: none;">
+                <p><strong>Shortened Link:</strong></p>
+                <input type="text" id="short-share-link" readonly>
+                <button id="copy-short-button">Copy Short Link</button>
             </div>
         </div>
 
@@ -159,6 +193,10 @@
                     document.getElementById("uploaded-image").style.display = "block";
                     document.getElementById("link-container").style.display = "block";
                     document.getElementById("share-link").value = data.url;
+
+                    // Display shortened URL
+                    document.getElementById("short-link-container").style.display = "block";
+                    document.getElementById("short-share-link").value = data.short_url;
                 } else {
                     document.getElementById("error-message").textContent = "Error: " + data.error;
                 }
@@ -179,6 +217,19 @@
                 alert("Link copied to clipboard!");
             } catch (err) {
                 alert("Failed to copy the link.");
+            }
+        });
+
+        document.getElementById("copy-short-button").addEventListener("click", function() {
+            let shortShareLink = document.getElementById("short-share-link");
+            shortShareLink.select();
+            shortShareLink.setSelectionRange(0, 99999); // For mobile devices
+
+            try {
+                document.execCommand("copy");
+                alert("Shortened link copied to clipboard!");
+            } catch (err) {
+                alert("Failed to copy the shortened link.");
             }
         });
     </script>
