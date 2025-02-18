@@ -19,56 +19,45 @@
         <input type="file" id="file-input" name="file" accept="image/*" required>
         <button type="submit">Upload</button>
     </form>
+
     <div id="preview">
-        <p id="message"></p>
         <img id="uploaded-image" src="" alt="Uploaded Image">
-    </div>
-    <div id="link-container">
-        <p>Shareable Link:</p>
-        <input type="text" id="share-link" readonly>
-        <button onclick="copyLink()">Copy</button>
+        <div id="link-container">
+            <p>Shareable Link:</p>
+            <input type="text" id="share-link" readonly>
+        </div>
     </div>
 
     <script>
-        document.getElementById("upload-form").addEventListener("submit", async function (e) {
-            e.preventDefault();
+        document.getElementById("upload-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            let formData = new FormData();
             let fileInput = document.getElementById("file-input");
+
             if (fileInput.files.length === 0) {
                 alert("Please select an image.");
                 return;
             }
 
-            let formData = new FormData();
             formData.append("file", fileInput.files[0]);
 
-            let response = await fetch("/upload", {
+            fetch("{{ url_for('image_upload.upload') }}", {
                 method: "POST",
                 body: formData
-            });
-
-            let result = await response.json();
-            if (result.success) {
-                document.getElementById("message").textContent = "Image uploaded successfully!";
-                
-                // Show uploaded image
-                let imgElement = document.getElementById("uploaded-image");
-                imgElement.src = result.url;
-                imgElement.style.display = "block";
-
-                // Show shareable link
-                document.getElementById("share-link").value = result.url;
-                document.getElementById("link-container").style.display = "block";
-            } else {
-                document.getElementById("message").textContent = "Upload failed: " + result.error;
-            }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById("uploaded-image").src = data.url;
+                    document.getElementById("uploaded-image").style.display = "block";
+                    document.getElementById("link-container").style.display = "block";
+                    document.getElementById("share-link").value = data.url;
+                } else {
+                    alert("Error: " + data.error);
+                }
+            })
+            .catch(error => console.error("Error:", error));
         });
-
-        function copyLink() {
-            let linkInput = document.getElementById("share-link");
-            linkInput.select();
-            document.execCommand("copy");
-            alert("Link copied to clipboard!");
-        }
     </script>
 </body>
 </html>

@@ -38,6 +38,7 @@ from reportlab.pdfgen import canvas
 import openpyxl
 import fitz  # PyMuPDF
 from dotenv import load_dotenv
+from image_upload import image_upload_bp  # Import the Blueprint
 
 
 load_dotenv()
@@ -65,6 +66,10 @@ ZERO_BOUNCE_API_KEY = "1a9c6c81e36b47209bc393a30fba1a8f"
 # Initialize Flask app
 app = Flask(__name__)
 app.secret_key = "adfasfasasdf"
+
+# Register the Blueprint
+app.register_blueprint(image_upload_bp)
+
 
 # Specify upload folder (relative path)
 app.config['UPLOAD_FOLDER'] = 'uploads'
