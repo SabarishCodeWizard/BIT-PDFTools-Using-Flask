@@ -5,27 +5,116 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Uploader</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        input[type="file"] { margin: 10px; }
-        #preview { margin-top: 20px; }
-        img { max-width: 300px; display: none; }
-        #link-container { margin-top: 10px; display: none; }
-        #share-link { padding: 5px; border: 1px solid #ccc; width: 80%; }
+        /* Base styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f1f1;
+            color: #333;
+            padding: 40px;
+            margin: 0;
+            text-align: center;
+        }
+
+        /* Container for content */
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Header styling */
+        h1 {
+            color: #e50914; /* Red */
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* File input and button styling */
+        input[type="file"] {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button {
+            background-color: #e50914; /* Red */
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #c4070e; /* Darker red on hover */
+        }
+
+        /* Image preview section */
+        #preview {
+            margin-top: 30px;
+        }
+
+        img {
+            max-width: 300px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        /* Shareable link section */
+        #link-container {
+            margin-top: 15px;
+            display: none;
+            text-align: left;
+        }
+
+        #share-link {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            background-color: #f9f9f9;
+            color: #333;
+            font-size: 16px;
+            cursor: not-allowed;
+        }
+
+        #share-link:focus {
+            outline: none;
+            background-color: #f0f0f0;
+        }
+
+        /* Error message styling */
+        .error-message {
+            color: red;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
-    <h1>Upload an Image</h1>
-    <form id="upload-form" enctype="multipart/form-data">
-        <input type="file" id="file-input" name="file" accept="image/*" required>
-        <button type="submit">Upload</button>
-    </form>
+    <div class="container">
+        <h1>Upload an Image</h1>
+        <form id="upload-form" enctype="multipart/form-data">
+            <input type="file" id="file-input" name="file" accept="image/*" required>
+            <button type="submit">Upload</button>
+        </form>
 
-    <div id="preview">
-        <img id="uploaded-image" src="" alt="Uploaded Image">
-        <div id="link-container">
-            <p>Shareable Link:</p>
-            <input type="text" id="share-link" readonly>
+        <div id="preview">
+            <img id="uploaded-image" src="" alt="Uploaded Image">
+            <div id="link-container">
+                <p><strong>Shareable Link:</strong></p>
+                <input type="text" id="share-link" readonly>
+            </div>
         </div>
+
+        <div class="error-message" id="error-message"></div>
     </div>
 
     <script>
@@ -53,10 +142,13 @@
                     document.getElementById("link-container").style.display = "block";
                     document.getElementById("share-link").value = data.url;
                 } else {
-                    alert("Error: " + data.error);
+                    document.getElementById("error-message").textContent = "Error: " + data.error;
                 }
             })
-            .catch(error => console.error("Error:", error));
+            .catch(error => {
+                console.error("Error:", error);
+                document.getElementById("error-message").textContent = "An unexpected error occurred. Please try again.";
+            });
         });
     </script>
 </body>
