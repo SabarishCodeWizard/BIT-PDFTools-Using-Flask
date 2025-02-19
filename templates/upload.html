@@ -59,34 +59,6 @@
             background-color: #c4070e; /* Darker red on hover */
         }
 
-        /* Drag and drop area */
-        #drop-area {
-            border: 2px dashed #ddd;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 15px 0;
-        }
-
-        #drop-area.highlight {
-            border-color: #e50914;
-        }
-
-        /* Progress bar */
-        #progress-bar {
-            width: 100%;
-            background-color: #f3f3f3;
-            border-radius: 5px;
-            overflow: hidden;
-            margin-top: 15px;
-            display: none;
-        }
-
-        #progress-bar div {
-            height: 20px;
-            background-color: #e50914;
-            width: 0;
-        }
-
         /* Image preview section */
         #preview {
             margin-top: 30px;
@@ -196,14 +168,6 @@
             <button type="submit">Upload</button>
         </form>
 
-        <div id="drop-area">
-            <p>Drag & Drop your image here</p>
-        </div>
-
-        <div id="progress-bar">
-            <div></div>
-        </div>
-
         <div class="spinner" id="spinner"></div>
 
         <div id="preview">
@@ -229,41 +193,11 @@
             uploadFile(document.getElementById("file-input").files[0]);
         });
 
-        let dropArea = document.getElementById("drop-area");
-
-        ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
-            dropArea.addEventListener(eventName, preventDefaults, false);
-        });
-
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
-        ["dragenter", "dragover"].forEach(eventName => {
-            dropArea.addEventListener(eventName, () => dropArea.classList.add("highlight"), false);
-        });
-
-        ["dragleave", "drop"].forEach(eventName => {
-            dropArea.addEventListener(eventName, () => dropArea.classList.remove("highlight"), false);
-        });
-
-        dropArea.addEventListener("drop", handleDrop, false);
-
-        function handleDrop(e) {
-            let dt = e.dataTransfer;
-            let files = dt.files;
-            uploadFile(files[0]);
-        }
-
         function uploadFile(file) {
             let formData = new FormData();
             formData.append("file", file);
 
-            let progressBar = document.getElementById("progress-bar");
-            let progress = progressBar.querySelector("div");
             let spinner = document.getElementById("spinner");
-            progressBar.style.display = "block";
             spinner.style.display = "block";
 
             fetch("{{ url_for('image_upload.upload') }}", {
@@ -290,21 +224,8 @@
                 document.getElementById("error-message").textContent = "An unexpected error occurred. Please try again.";
             })
             .finally(() => {
-                progressBar.style.display = "none";
                 spinner.style.display = "none";
             });
-
-            let xhr = new XMLHttpRequest();
-            xhr.open("POST", "{{ url_for('image_upload.upload') }}", true);
-
-            xhr.upload.addEventListener("progress", function(e) {
-                if (e.lengthComputable) {
-                    let percentComplete = (e.loaded / e.total) * 100;
-                    progress.style.width = percentComplete + "%";
-                }
-            });
-
-            xhr.send(formData);
         }
 
         document.getElementById("copy-button").addEventListener("click", function() {
