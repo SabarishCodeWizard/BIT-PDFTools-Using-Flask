@@ -8,7 +8,7 @@
         /* Base styling */
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f9f9f9;
+            background-color: #ffffff;
             color: #333;
             padding: 40px;
             margin: 0;
@@ -17,7 +17,7 @@
 
         /* Container for content */
         .container {
-            background-color: #ffffff;
+            background-color: #f9f9f9;
             border-radius: 10px;
             padding: 30px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -27,7 +27,7 @@
 
         /* Header styling */
         h1 {
-            color: #333;
+            color: #e50914; /* Red */
             font-size: 28px;
             margin-bottom: 20px;
         }
@@ -44,7 +44,7 @@
         }
 
         button {
-            background-color: #007bff;
+            background-color: #e50914; /* Red */
             color: white;
             border: none;
             padding: 12px 20px;
@@ -56,7 +56,35 @@
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #c4070e; /* Darker red on hover */
+        }
+
+        /* Drag and drop area */
+        #drop-area {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        #drop-area.highlight {
+            border-color: #e50914;
+        }
+
+        /* Progress bar */
+        #progress-bar {
+            width: 100%;
+            background-color: #f3f3f3;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 15px;
+            display: none;
+        }
+
+        #progress-bar div {
+            height: 20px;
+            background-color: #e50914;
+            width: 0;
         }
 
         /* Image preview section */
@@ -65,55 +93,73 @@
         }
 
         img {
-            max-width: 100%;
+            max-width: 300px; /* Smaller image size */
             border-radius: 8px;
             display: none;
         }
 
         /* Shareable link section */
-        #link-container {
+        #link-container, #short-link-container {
             margin-top: 15px;
             display: none;
             text-align: left;
+            display: flex;
+            align-items: center;
         }
 
-        #share-link {
+        #share-link, #short-share-link {
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            width: calc(100% - 100px);
             background-color: #f9f9f9;
             color: #333;
             font-size: 16px;
             cursor: not-allowed;
-            display: inline-block;
+            flex-grow: 1;
+            margin-right: 10px;
         }
 
-        #share-link:focus {
+        #share-link:focus, #short-share-link:focus {
             outline: none;
             background-color: #f0f0f0;
         }
 
-        #copy-button {
+        #copy-button, #copy-short-button {
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            background-color: #007bff;
+            background-color: #e50914;
             color: white;
             font-size: 16px;
             cursor: pointer;
-            display: inline-block;
-            margin-left: 10px;
         }
 
-        #copy-button:hover {
-            background-color: #0056b3;
+        #copy-button:hover, #copy-short-button:hover {
+            background-color: #c4070e;
         }
 
         /* Error message styling */
         .error-message {
             color: red;
             margin-top: 15px;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: none;
+            margin: 20px auto;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #e50914;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* Media queries for mobile view */
@@ -131,17 +177,13 @@
                 font-size: 24px;
             }
 
-            input[type="file"], button, #share-link, #copy-button {
+            input[type="file"], button, #share-link, #copy-button, #short-share-link, #copy-short-button {
                 font-size: 14px;
                 padding: 10px;
             }
 
             img {
                 max-width: 100%;
-            }
-
-            #share-link {
-                width: calc(100% - 80px);
             }
         }
     </style>
@@ -154,6 +196,16 @@
             <button type="submit">Upload</button>
         </form>
 
+        <div id="drop-area">
+            <p>Drag & Drop your image here</p>
+        </div>
+
+        <div id="progress-bar">
+            <div></div>
+        </div>
+
+        <div class="spinner" id="spinner"></div>
+
         <div id="preview">
             <img id="uploaded-image" src="" alt="Uploaded Image">
             <div id="link-container">
@@ -161,7 +213,7 @@
                 <input type="text" id="share-link" readonly>
                 <button id="copy-button">Copy Link</button>
             </div>
-            <div id="short-link-container" style="margin-top: 15px; display: none;">
+            <div id="short-link-container" style="margin-top: 15px;">
                 <p><strong>Shortened Link:</strong></p>
                 <input type="text" id="short-share-link" readonly>
                 <button id="copy-short-button">Copy Short Link</button>
@@ -174,15 +226,45 @@
     <script>
         document.getElementById("upload-form").addEventListener("submit", function(event) {
             event.preventDefault();
+            uploadFile(document.getElementById("file-input").files[0]);
+        });
+
+        let dropArea = document.getElementById("drop-area");
+
+        ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ["dragenter", "dragover"].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => dropArea.classList.add("highlight"), false);
+        });
+
+        ["dragleave", "drop"].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => dropArea.classList.remove("highlight"), false);
+        });
+
+        dropArea.addEventListener("drop", handleDrop, false);
+
+        function handleDrop(e) {
+            let dt = e.dataTransfer;
+            let files = dt.files;
+            uploadFile(files[0]);
+        }
+
+        function uploadFile(file) {
             let formData = new FormData();
-            let fileInput = document.getElementById("file-input");
+            formData.append("file", file);
 
-            if (fileInput.files.length === 0) {
-                alert("Please select an image.");
-                return;
-            }
-
-            formData.append("file", fileInput.files[0]);
+            let progressBar = document.getElementById("progress-bar");
+            let progress = progressBar.querySelector("div");
+            let spinner = document.getElementById("spinner");
+            progressBar.style.display = "block";
+            spinner.style.display = "block";
 
             fetch("{{ url_for('image_upload.upload') }}", {
                 method: "POST",
@@ -193,11 +275,11 @@
                 if (data.success) {
                     document.getElementById("uploaded-image").src = data.url;
                     document.getElementById("uploaded-image").style.display = "block";
-                    document.getElementById("link-container").style.display = "block";
+                    document.getElementById("link-container").style.display = "flex";
                     document.getElementById("share-link").value = data.url;
 
                     // Display shortened URL
-                    document.getElementById("short-link-container").style.display = "block";
+                    document.getElementById("short-link-container").style.display = "flex";
                     document.getElementById("short-share-link").value = data.short_url;
                 } else {
                     document.getElementById("error-message").textContent = "Error: " + data.error;
@@ -206,8 +288,24 @@
             .catch(error => {
                 console.error("Error:", error);
                 document.getElementById("error-message").textContent = "An unexpected error occurred. Please try again.";
+            })
+            .finally(() => {
+                progressBar.style.display = "none";
+                spinner.style.display = "none";
             });
-        });
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", "{{ url_for('image_upload.upload') }}", true);
+
+            xhr.upload.addEventListener("progress", function(e) {
+                if (e.lengthComputable) {
+                    let percentComplete = (e.loaded / e.total) * 100;
+                    progress.style.width = percentComplete + "%";
+                }
+            });
+
+            xhr.send(formData);
+        }
 
         document.getElementById("copy-button").addEventListener("click", function() {
             let shareLink = document.getElementById("share-link");
