@@ -7,6 +7,30 @@
     <title>URL Shortener with QR Code</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='feature.css') }}">
+    <style>
+        .pushable {
+            background: hsl(340deg 100% 32%);
+            border-radius: 12px;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            outline-offset: 4px;
+        }
+
+        .front {
+            display: block;
+            padding: 12px 42px;
+            border-radius: 12px;
+            font-size: 1.25rem;
+            background: hsl(345deg 100% 47%);
+            color: white;
+            transform: translateY(-6px);
+        }
+
+        .pushable:active .front {
+            transform: translateY(-2px);
+        }
+    </style>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script>
         function copyToClipboard() {
@@ -34,19 +58,21 @@
     </script>
 </head>
 
-
 <body class="bg-gray-50 flex items-center justify-center min-h-screen">
-   
+
     <div class="bg-white p-6 rounded-2xl shadow-lg max-w-lg w-full">
         <h1 class="text-3xl font-bold text-gray-800 text-center mb-4">Shorten Your URL</h1>
 
         <form name="urlForm" method="POST" class="space-y-4" onsubmit="return validateForm()">
             <input type="text" name="long_url" placeholder="Enter your long URL" required
                 class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none">
-            <button type="submit"
-                class="w-full bg-red-600 text-white p-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-red-700 transition">
-                Shorten URL
-            </button>
+            <div class="flex justify-center">
+                <button class="pushable" type="submit">
+                    <span class="front">
+                        Shorten URL
+                    </span>
+                </button>
+            </div>
 
             <!-- Loading Circle Progress Bar -->
             <div id="loading-container" class="hidden flex justify-center mt-4">
@@ -54,8 +80,8 @@
                     <circle cx="25" cy="25" r="20" stroke="#E5E7EB" stroke-width="5"></circle>
                     <path fill="none" stroke="#DC2626" stroke-width="5" stroke-linecap="round"
                         d="M25 5a20 20 0 0 1 20 20">
-                        <animateTransform attributeType="XML" attributeName="transform" type="rotate"
-                            from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite" />
+                        <animateTransform attributeType="XML" attributeName="transform" type="rotate" from="0 25 25"
+                            to="360 25 25" dur="1s" repeatCount="indefinite" />
                     </path>
                 </svg>
             </div>
@@ -64,18 +90,18 @@
         {% if short_url %}
         <div class="mt-6 text-center">
             <p class="text-lg font-semibold">Shortened URL:</p>
-            <a id="short-url" href="{{ short_url }}" target="_blank"
-                class="text-red-600 font-medium break-words hover:underline">{{ short_url }}</a>
-
-            <!-- Copy Button with Clipboard Icon -->
-            <button onclick="copyToClipboard()"
-                class="mt-3 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-300 transition">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path
-                        d="M7 2a2 2 0 00-2 2v10a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zM6 4a1 1 0 011-1h6a1 1 0 011 1v10a1 1 0 01-1 1H7a1 1 0 01-1-1V4zm-3 2a1 1 0 011-1h1v10a3 3 0 003 3h6a3 3 0 003-3V6h1a1 1 0 011 1v10a3 3 0 01-3 3H7a3 3 0 01-3-3V6z" />
-                </svg>
-                Copy to Clipboard
-            </button>
+            <div class="flex items-center justify-center gap-2">
+                <a id="short-url" href="{{ short_url }}" target="_blank"
+                    class="text-red-600 font-medium break-words hover:underline">{{ short_url }}</a>
+                <!-- Copy Button with Clipboard Icon -->
+                <button onclick="copyToClipboard()"
+                    class="bg-gray-200 text-gray-700 px-2 py-2 rounded-lg flex items-center justify-center hover:bg-gray-300 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path
+                            d="M7 2a2 2 0 00-2 2v10a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zM6 4a1 1 0 011-1h6a1 1 0 011 1v10a1 1 0 01-1 1H7a1 1 0 01-1-1V4zm-3 2a1 1 0 011-1h1v10a3 3 0 003 3h6a3 3 0 003-3V6h1a1 1 0 011 1v10a3 3 0 01-3 3H7a3 3 0 01-3-3V6z" />
+                    </svg>
+                </button>
+            </div>
 
             <div class="qr-code mt-4">
                 <img src="{{ url_for('generate_qr', url=short_url) }}" alt="QR Code"
