@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,7 +28,8 @@
 
         /* Header styling */
         h1 {
-            color: #e50914; /* Red */
+            color: #e50914;
+            /* Red */
             font-size: 28px;
             margin-bottom: 20px;
         }
@@ -44,7 +46,8 @@
         }
 
         button {
-            background-color: #e50914; /* Red */
+            background-color: #e50914;
+            /* Red */
             color: white;
             border: none;
             padding: 12px 20px;
@@ -56,7 +59,8 @@
         }
 
         button:hover {
-            background-color: #c4070e; /* Darker red on hover */
+            background-color: #c4070e;
+            /* Darker red on hover */
         }
 
         /* Image preview section */
@@ -65,22 +69,26 @@
         }
 
         img {
-            max-width: 300px; /* Smaller image size */
+            max-width: 300px;
+            /* Smaller image size */
             border-radius: 8px;
             display: none;
         }
 
         /* Shareable link section */
-        #link-container, #short-link-container {
+        #link-container,
+        #short-link-container {
             margin-top: 15px;
             display: none;
             text-align: left;
             display: flex;
             align-items: center;
-            flex-wrap: wrap; /* Allow wrapping */
+            flex-wrap: wrap;
+            /* Allow wrapping */
         }
 
-        #share-link, #short-share-link {
+        #share-link,
+        #short-share-link {
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
@@ -90,15 +98,18 @@
             cursor: not-allowed;
             flex-grow: 1;
             margin-right: 10px;
-            min-width: 0; /* Allow shrinking */
+            min-width: 0;
+            /* Allow shrinking */
         }
 
-        #share-link:focus, #short-share-link:focus {
+        #share-link:focus,
+        #short-share-link:focus {
             outline: none;
             background-color: #f0f0f0;
         }
 
-        #copy-button, #copy-short-button {
+        #copy-button,
+        #copy-short-button {
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
@@ -106,11 +117,14 @@
             color: white;
             font-size: 16px;
             cursor: pointer;
-            flex-shrink: 0; /* Prevent shrinking */
-            margin-top: 10px; /* Add margin for wrapping */
+            flex-shrink: 0;
+            /* Prevent shrinking */
+            margin-top: 10px;
+            /* Add margin for wrapping */
         }
 
-        #copy-button:hover, #copy-short-button:hover {
+        #copy-button:hover,
+        #copy-short-button:hover {
             background-color: #c4070e;
         }
 
@@ -153,7 +167,12 @@
                 font-size: 24px;
             }
 
-            input[type="file"], button, #share-link, #copy-button, #short-share-link, #copy-short-button {
+            input[type="file"],
+            button,
+            #share-link,
+            #copy-button,
+            #short-share-link,
+            #copy-short-button {
                 font-size: 14px;
                 padding: 10px;
             }
@@ -162,24 +181,61 @@
                 max-width: 100%;
             }
 
-            #link-container, #short-link-container {
-                flex-direction: column; /* Stack elements vertically */
-                align-items: stretch; /* Stretch to container width */
+            #link-container,
+            #short-link-container {
+                flex-direction: column;
+                /* Stack elements vertically */
+                align-items: stretch;
+                /* Stretch to container width */
             }
 
-            #share-link, #short-share-link, #copy-button, #copy-short-button {
-                margin-right: 0; /* Remove right margin */
-                margin-top: 10px; /* Add top margin */
+            #share-link,
+            #short-share-link,
+            #copy-button,
+            #copy-short-button {
+                margin-right: 0;
+                /* Remove right margin */
+                margin-top: 10px;
+                /* Add top margin */
             }
+        }
+
+        .pushable {
+            background: hsl(340deg 100% 32%);
+            border-radius: 12px;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            outline-offset: 4px;
+        }
+
+        .front {
+            display: block;
+            padding: 12px 42px;
+            border-radius: 12px;
+            font-size: 1.25rem;
+            background: hsl(345deg 100% 47%);
+            color: white;
+            transform: translateY(-6px);
+        }
+
+        .pushable:active .front {
+            transform: translateY(-2px);
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Upload an Image</h1>
         <form id="upload-form" enctype="multipart/form-data">
             <input type="file" id="file-input" name="file" accept="image/*" required>
-            <button type="submit">Upload</button>
+            <button class="pushable" type="submit">
+                <span class="front">
+                    upload
+                </span>
+            </button>
+
         </form>
 
         <div class="spinner" id="spinner"></div>
@@ -202,7 +258,7 @@
     </div>
 
     <script>
-        document.getElementById("upload-form").addEventListener("submit", function(event) {
+        document.getElementById("upload-form").addEventListener("submit", function (event) {
             event.preventDefault();
             uploadFile(document.getElementById("file-input").files[0]);
         });
@@ -218,31 +274,31 @@
                 method: "POST",
                 body: formData
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    document.getElementById("uploaded-image").src = data.url;
-                    document.getElementById("uploaded-image").style.display = "block";
-                    document.getElementById("link-container").style.display = "flex";
-                    document.getElementById("share-link").value = data.url;
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById("uploaded-image").src = data.url;
+                        document.getElementById("uploaded-image").style.display = "block";
+                        document.getElementById("link-container").style.display = "flex";
+                        document.getElementById("share-link").value = data.url;
 
-                    // Display shortened URL
-                    document.getElementById("short-link-container").style.display = "flex";
-                    document.getElementById("short-share-link").value = data.short_url;
-                } else {
-                    document.getElementById("error-message").textContent = "Error: " + data.error;
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                document.getElementById("error-message").textContent = "An unexpected error occurred. Please try again.";
-            })
-            .finally(() => {
-                spinner.style.display = "none";
-            });
+                        // Display shortened URL
+                        document.getElementById("short-link-container").style.display = "flex";
+                        document.getElementById("short-share-link").value = data.short_url;
+                    } else {
+                        document.getElementById("error-message").textContent = "Error: " + data.error;
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    document.getElementById("error-message").textContent = "An unexpected error occurred. Please try again.";
+                })
+                .finally(() => {
+                    spinner.style.display = "none";
+                });
         }
 
-        document.getElementById("copy-button").addEventListener("click", function() {
+        document.getElementById("copy-button").addEventListener("click", function () {
             let shareLink = document.getElementById("share-link");
             shareLink.select();
             shareLink.setSelectionRange(0, 99999); // For mobile devices
@@ -255,7 +311,7 @@
             }
         });
 
-        document.getElementById("copy-short-button").addEventListener("click", function() {
+        document.getElementById("copy-short-button").addEventListener("click", function () {
             let shortShareLink = document.getElementById("short-share-link");
             shortShareLink.select();
             shortShareLink.setSelectionRange(0, 99999); // For mobile devices
@@ -269,4 +325,5 @@
         });
     </script>
 </body>
+
 </html>
