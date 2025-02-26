@@ -57,16 +57,40 @@
             display: inline-block;
             margin-top: 20px;
         }
+        .not-accepted-box {
+            background-color: #dc3545;
+            color: white;
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .button-container {
+            margin-top: 20px;
+        }
+        .button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Terms and Conditions</h1>
         <p>Welcome to <strong>BIT Translator & PDF Tools</strong>. By using our services at <a href="https://bittranslator.pythonanywhere.com/">bittranslator.pythonanywhere.com</a>, you agree to these Terms and Conditions.</p>
-        
+
         <h2>1. Acceptance of Terms</h2>
         <p>By accessing or using our services, you acknowledge that you have read and agreed to these terms.</p>
-        
+
         <h2>2. Services Provided</h2>
         <ul>
             <li>PDF conversions (Word to PDF, PDF to Word, Image to PDF, PDF to Image, Excel to PDF)</li>
@@ -75,40 +99,47 @@
             <li>User authentication (login/logout)</li>
             <li>Feedback and user support</li>
         </ul>
-        
+
         <h2>3. User Responsibilities</h2>
         <ul>
             <li>Do not upload or process illegal or copyrighted materials.</li>
             <li>Do not use the service for fraudulent or malicious activities.</li>
             <li>Ensure uploaded files do not contain harmful content (e.g., viruses, malware).</li>
         </ul>
-        
+
         <h2>4. Intellectual Property</h2>
         <p>All content, code, and services are owned by us or licensed for use. You may not copy, modify, or redistribute any part of our services without permission.</p>
-        
+
         <h2>5. Privacy & Data Handling</h2>
         <p>We do <strong>not</strong> store user-uploaded files permanently. We collect minimal user data for authentication and analytics.</p>
-        
+
         <h2>6. Limitation of Liability</h2>
         <ul>
             <li>Loss of data due to technical failures.</li>
             <li>Direct or indirect damages from service use.</li>
             <li>Third-party service interruptions or security risks.</li>
         </ul>
-        
+
         <h2>7. Modifications & Termination</h2>
         <p>We reserve the right to modify these terms or discontinue services at any time without notice.</p>
-        
+
         <h2>8. Contact Information</h2>
         <div class="contact">
             <p>📧 <strong>Email:</strong> supportbittools@gmail.com</p>
             <p>🌐 <strong>Website:</strong> <a href="https://bittranslator.pythonanywhere.com/">bittranslator.pythonanywhere.com</a></p>
         </div>
 
-        <!-- Accepted Box -->
-        <div class="accepted-box">
-            ✔ Accepted
-        </div>
+        <!-- Acceptance Status -->
+        {% if accepted %}
+            <div class="accepted-box">✔ Accepted</div>
+        {% else %}
+            <div class="not-accepted-box">✖ Not Accepted</div>
+            <div class="button-container">
+                <a href="{{ url_for('terms') }}">
+                    <button class="button">Accept Terms</button>
+                </a>
+            </div>
+        {% endif %}
     </div>
 </body>
 </html>

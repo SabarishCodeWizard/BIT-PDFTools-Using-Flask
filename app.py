@@ -731,7 +731,8 @@ def privacy():
 
 @app.route('/accept')
 def accept():
-    return render_template('accept.html')
+    accepted = session.get('accepted_terms', False)  # Check if terms are accepted
+    return render_template('accept.html', accepted=accepted)
 
 @app.route('/htmlConverter')
 def htmlConverter():
